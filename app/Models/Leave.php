@@ -60,6 +60,34 @@ class Leave extends Model
         return $statuses[$this->status];
     }
 
+    public function isInProgressWithAllLeader()
+    {
+        $this->load('leaveApproveds');
+
+        $hasApprovedByOneOrMoreLeader = $this->leaveApproveds->whereIn('status', [LeaveApproved::STATUS_APPROVED])->isNotEmpty();
+        $hasRejectedByOneOrMoreLeader = $this->leaveApproveds->whereIn('status', [LeaveApproved::STATUS_REJECTED])->isNotEmpty();
+
+        // check if one or more is approved and check if one or more is rejected
+        // or check if leaves approveds is empty
+        return ($hasApprovedByOneOrMoreLeader && $hasRejectedByOneOrMoreLeader) || $this->leaveApproveds->isEmpty();
+    }
+
+    public function isApprovedWithAllLeader()
+    {
+        $this->load('leaveApproveds');
+
+        return $this->leaveApproveds->whereNotIn('status', [LeaveApproved::STATUS_REJECTED, LeaveApproved::STATUS_IN_PROGRESS])->isEmpty();
+    }
+
+    /**
+     * @param Builder $query
+     * @return void
+     */
+    public function scopeIsInProgress($query)
+    {
+        $query->where('status', self::STATUS_IN_PROGRESS);
+    }
+
     /**
      * @param Builder $query
      * @param $status
@@ -68,5 +96,15 @@ class Leave extends Model
     public function scopeOrderByStatus($query, $status = self::STATUS_IN_PROGRESS)
     {
         $query->orderByRaw('CASE WHEN status = ? THEN 1 ELSE 2 END', [$status]);
+    }
+
+    public function leaveApproveds()
+    {
+        return $this->hasMany(LeaveApproved::class);
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
     }
 }

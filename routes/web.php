@@ -18,6 +18,12 @@ Route::prefix('admin')->name('admin.')->group(function () {
     Route::resource('dashboard', \App\Http\Controllers\Admin\DashboardController::class);
     Route::resource('employees', \App\Http\Controllers\Admin\EmployeeController::class)->except('show');
     Route::resource('employees.leaves', \App\Http\Controllers\Admin\LeaveController::class)->only('index')->parameter('leaves', 'leave');
+    Route::prefix('leaves/request')->name('leaves.request.')->group(function () {
+        Route::patch('pending/{leave}/status/{status}', [\App\Http\Controllers\Admin\Leaves\PendingLeaveController::class, 'status'])
+            ->name('pending.status.update')
+            ->whereIn('status', [\App\Models\Leave::STATUS_APPROVED, \App\Models\Leave::STATUS_REJECTED]);
+        Route::resource('pending', \App\Http\Controllers\Admin\Leaves\PendingLeaveController::class)->parameter('pending', 'leave');
+    });
 });
 
 Route::prefix('employee')->name('employee.')->group(function () {

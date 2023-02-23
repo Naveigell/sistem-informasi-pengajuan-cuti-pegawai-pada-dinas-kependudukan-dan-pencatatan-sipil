@@ -13,7 +13,7 @@
             <li class="menu-header">Users</li>
             <li class="@if (request()->routeIs('admin.employees.*')) active @endif"><a class="nav-link" href="{{ route('admin.employees.index') }}"><i class="fas fa-users"></i> <span>Pegawai</span></a></li>
             <li class="menu-header">Pengajuan Cuti</li>
-            <li class="@if (request()->routeIs('admin.employees.*')) active @endif"><a class="nav-link" href="{{ route('admin.employees.index') }}"><i class="fas fa-users"></i> <span>Pegawai</span></a></li>
+            <li class="@if (request()->routeIs('admin.leaves.request.pending.*')) active @endif"><a class="nav-link" href="{{ route('admin.leaves.request.pending.index') }}"><i class="fas fa-clock"></i> <span>Pending</span></a></li>
         </ul>
     </aside>
 </div>
