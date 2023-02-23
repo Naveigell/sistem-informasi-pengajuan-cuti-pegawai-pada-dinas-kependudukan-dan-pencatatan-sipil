@@ -1,0 +1,60 @@
+@extends('layouts.admin.admin')
+
+@section('content-title', 'Pegawai')
+
+@section('content-body')
+    @if ($message = session()->get('success'))
+        <x-alert.success :message="$message"></x-alert.success>
+    @endif
+    <div class="col-lg-12 col-md-12 col-12 col-sm-12 no-padding-margin">
+        <div class="card">
+            <div class="card-header">
+                <h4>Pegawai</h4>
+                <div class="card-header-action">
+                    <a href="{{ route('admin.employees.create') }}" class="btn btn-primary"><i class="fa fa-plus"></i> Tambah Pegawai</a>
+                </div>
+            </div>
+            <div class="card-body p-0">
+                <div class="table-responsive">
+                    <table class="table table-striped mb-0">
+                        <thead>
+                        <tr>
+                            <th class="col-1">No</th>
+                            <th class="col-4">Nama Pegawai</th>
+                            <th class="col-3">Username</th>
+                            <th class="col-3">Email</th>
+                            <th class="col-3">Aksi</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        @forelse($employees as $employee)
+                            <tr>
+                                <td>
+                                    <x-iterate :pagination="$employees" :loop="$loop"></x-iterate>
+                                </td>
+                                <td>{{ $employee->name }}</td>
+                                <td>{{ $employee->username }}</td>
+                                <td>{{ $employee->email }}</td>
+                                <td>
+                                    <a href="{{ route('admin.employees.edit', $employee) }}" class="btn btn-warning"><i class="fa fa-eye"></i></a>
+                                    <button class="btn btn-danger btn-action trigger--modal-delete cursor-pointer" data-url="{{ route('admin.employees.destroy', $employee) }}"><i class="fas fa-trash"></i></button>
+                                </td>
+                            </tr>
+                        @empty
+                            <tr>
+                                <td colspan="3" style="text-align: center;">Data Empty</td>
+                            </tr>
+                        @endforelse
+                        </tbody>
+                    </table>
+                </div>
+
+                {{ $employees->links() }}
+            </div>
+        </div>
+    </div>
+@endsection
+
+@section('content-modal')
+    <x-modal.delete :name="'Pegawai'"></x-modal.delete>
+@endsection
