@@ -20,10 +20,10 @@
                         <thead>
                         <tr>
                             <th class="col-1">No</th>
-                            <th class="col-4">Nama Pegawai</th>
-                            <th class="col-3">Username</th>
-                            <th class="col-3">Email</th>
-                            <th class="col-3">Aksi</th>
+                            <th class="col-2">Nama Pegawai</th>
+                            <th class="col-2">Username</th>
+                            <th class="col-2">Email</th>
+                            <th class="col-2">Aksi</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -36,13 +36,16 @@
                                 <td>{{ $employee->username }}</td>
                                 <td>{{ $employee->email }}</td>
                                 <td>
-                                    <a href="{{ route('admin.employees.edit', $employee) }}" class="btn btn-warning"><i class="fa fa-eye"></i></a>
-                                    <button class="btn btn-danger btn-action trigger--modal-delete cursor-pointer" data-url="{{ route('admin.employees.destroy', $employee) }}"><i class="fas fa-trash"></i></button>
+                                    @if(auth()->user()->isAdmin())
+                                        <a href="{{ route('admin.employees.edit', $employee) }}" class="btn btn-warning"><i class="fa fa-eye"></i></a>
+                                        <button class="btn btn-danger btn-action trigger--modal-delete cursor-pointer" data-url="{{ route('admin.employees.destroy', $employee) }}"><i class="fas fa-trash"></i></button>
+                                    @endif
+                                    <a href="{{ route('admin.employees.leaves.index', $employee) }}" class="btn btn-primary"><i class="fa fa-envelope-open"></i></a>
                                 </td>
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="3" style="text-align: center;">Data Empty</td>
+                                <td colspan="5" style="text-align: center;">Data Empty</td>
                             </tr>
                         @endforelse
                         </tbody>

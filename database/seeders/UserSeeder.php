@@ -24,15 +24,39 @@ class UserSeeder extends Seeder
         $hashedPassword = Hash::make(123456);
 
         User::create([
-            "name" => "admin",
+            "name" => "Admin Test",
             "email" => "admin@gmail.com",
             "password" => 123456,
             "role" => User::ROLE_ADMIN,
             "username" => "admin",
         ]);
 
+        User::create([
+            "name" => "Employee Test",
+            "email" => "employee@gmail.com",
+            "password" => 123456,
+            "role" => User::ROLE_EMPLOYEE,
+            "username" => "employee",
+        ]);
+
+        User::create([
+            "name" => "Head Department Test",
+            "email" => "head.department@gmail.com",
+            "password" => 123456,
+            "role" => User::ROLE_HEAD_OF_DEPARTMENT,
+            "username" => "head.department",
+        ]);
+
+        User::create([
+            "name" => "Head Field Test",
+            "email" => "head.field@gmail.com",
+            "password" => 123456,
+            "role" => User::ROLE_HEAD_OF_FIELD,
+            "username" => "head.field",
+        ]);
+
         foreach (range(1, 50) as $i) {
-            $role = User::ROLE_EMPLOYE;
+            $role = User::ROLE_EMPLOYEE;
 
             if ($i > 45) {
                 $role = User::ROLE_HEAD_OF_FIELD;

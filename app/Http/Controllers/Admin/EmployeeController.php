@@ -44,7 +44,7 @@ class EmployeeController extends Controller
     {
         DB::transaction(function () use ($request) {
             $user = User::create(
-                array_merge(['password' => 123456, 'role' => User::ROLE_EMPLOYE], $request->validated())
+                array_merge(['password' => 123456, 'role' => User::ROLE_EMPLOYEE], $request->validated())
             );
             $user->biodata()->create($request->validated());
         });

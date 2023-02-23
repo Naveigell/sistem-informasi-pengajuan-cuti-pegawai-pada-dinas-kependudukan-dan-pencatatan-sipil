@@ -12,6 +12,11 @@ class LoginController extends Controller
     public function login(LoginRequest $request)
     {
         if (auth()->attempt($request->only('email', 'password'))) {
+
+            if (auth()->user()->role == User::ROLE_EMPLOYEE) {
+                return redirect(route('employee.dashboard.index'));
+            }
+
             return redirect(route('admin.dashboard.index'));
         }
 

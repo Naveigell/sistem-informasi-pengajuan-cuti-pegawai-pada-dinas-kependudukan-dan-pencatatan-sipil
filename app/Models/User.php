@@ -30,7 +30,7 @@ class User extends Authenticatable
     const ROLE_ADMIN              = 'admin';
     const ROLE_HEAD_OF_FIELD      = 'head_of_field';
     const ROLE_HEAD_OF_DEPARTMENT = 'head_of_department';
-    const ROLE_EMPLOYE            = 'employee';
+    const ROLE_EMPLOYEE            = 'employee';
 
     /**
      * The attributes that should be hidden for serialization.
@@ -56,6 +56,11 @@ class User extends Authenticatable
         return $this->hasOne(Biodata::class);
     }
 
+    public function leaves()
+    {
+        return $this->hasMany(Leave::class);
+    }
+
     public function setPasswordAttribute($value)
     {
         $this->attributes['password'] = Hash::make($value);
@@ -67,6 +72,11 @@ class User extends Authenticatable
      */
     public function scopeEmployee($query)
     {
-        return $query->where('role', User::ROLE_EMPLOYE);
+        return $query->where('role', User::ROLE_EMPLOYEE);
+    }
+
+    public function isAdmin()
+    {
+        return $this->role == self::ROLE_ADMIN;
     }
 }
