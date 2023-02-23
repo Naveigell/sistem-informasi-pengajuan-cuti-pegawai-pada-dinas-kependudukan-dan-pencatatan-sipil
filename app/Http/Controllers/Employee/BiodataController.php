@@ -3,31 +3,22 @@
 namespace App\Http\Controllers\Employee;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Employee\LeaveRequest;
-use App\Models\Leave;
+use App\Http\Requests\Employee\BiodataRequest;
+use App\Http\Requests\Employee\PasswordRequest;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\DB;
 
-class LeaveController extends Controller
+class BiodataController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
+     * @return \Illuminate\Http\Response
      */
     public function index()
     {
-        $leaves = Leave::where('user_id', auth()->id())->latest();
-
-        if (\request('status')) {
-            $leaves->where('status', \request('status'));
-        } else {
-            $leaves->orderByStatus();
-        }
-
-        $leaves = $leaves->paginate(10);
-
-        return view('employee.pages.leave.index', compact('leaves'));
+        //
     }
 
     /**
@@ -37,26 +28,32 @@ class LeaveController extends Controller
      */
     public function create()
     {
-        return view('employee.pages.leave.form');
+        $user = auth()->user()->load('biodata');
+
+        return view('employee.pages.biodata.form', compact('user'));
     }
 
     /**
      * Store a newly created resource in storage.
      *
-     * @param LeaveRequest $request
+     * @param BiodataRequest $request
      * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
      */
-    public function store(LeaveRequest $request)
+    public function store(BiodataRequest $request)
     {
-        Leave::create(array_merge(
-            $request->validated(), [
-                "user_id" => auth()->id(),
-                "status" => Leave::STATUS_IN_PROGRESS,
-                "total_day" => $request->getLeaveTotalDays(),
-            ]
-        ));
+        DB::transaction(function () use ($request) {
+            auth()->user()->update($request->validated());
+            auth()->user()->biodata->update($request->validated());
+        });
 
-        return redirect(route('employee.leaves.index'))->with('success', 'Berhasil mengajukan cuti');
+        return redirect(route('employee.biodatas.create'))->with('biodata-success', 'Biodata berhasil diubah');
+    }
+
+    public function password(PasswordRequest $request)
+    {
+        auth()->user()->update(["password" => $request->get('password')]);
+
+        return redirect(route('employee.biodatas.create'))->with('password-success', 'Password berhasil diubah');
     }
 
     /**

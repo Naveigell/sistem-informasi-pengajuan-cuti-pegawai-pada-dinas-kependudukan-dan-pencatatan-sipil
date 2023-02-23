@@ -46,10 +46,10 @@
                 <div class="d-sm-none d-lg-inline-block">Hi, {{ auth()->user()->username }}</div>
             </a>
             <div class="dropdown-menu dropdown-menu-right">
-{{--                <a href="{{ route('admin.biodatas.create') }}" class="dropdown-item has-icon">--}}
-{{--                    <i class="far fa-user"></i> Profile--}}
-{{--                </a>--}}
-{{--                <div class="dropdown-divider"></div>--}}
+                <a href="{{ route('employee.biodatas.create') }}" class="dropdown-item has-icon">
+                    <i class="far fa-user"></i> Profil
+                </a>
+                <div class="dropdown-divider"></div>
                 <a href="{{ route('logout.store') }}" class="dropdown-item has-icon text-danger">
                     <i class="fas fa-sign-out-alt"></i> Logout
                 </a>

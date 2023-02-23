@@ -24,6 +24,7 @@
                             <th class="col-1">Disetujui Oleh</th>
                             <th class="col-1">Tidak Disetujui Oleh</th>
                             <th class="col-1">Status</th>
+                            <th class="col-3">Aksi</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -52,6 +53,10 @@
                                 </td>
                                 <td>
                                     <span class="badge {{ $leave->status_class_formatted }}">{{ $leave->status_formatted }}</span>
+                                </td>
+                                <td>
+                                    <button data-route="{{ route('admin.leaves.request.pending.status.update', [$leave, \App\Models\Leave::STATUS_APPROVED]) }}" data-title="Terima" data-body="Yakin ingin <span class='text text-success'>menerima</span>?" class="btn btn-success trigger--modal-aggrement" data-toggle="modal" data-target="#modal-aggrement"><i class="fa fa-check"></i></button>
+                                    <button data-route="{{ route('admin.leaves.request.pending.status.update', [$leave, \App\Models\Leave::STATUS_REJECTED]) }}" data-title="Tolak" data-body="Yakin ingin <span class='text text-danger'>menolak</span>?" class="btn btn-danger trigger--modal-aggrement" data-toggle="modal" data-target="#modal-aggrement"><i class="fa fa-times"></i></button>
                                 </td>
                             </tr>
                         @empty

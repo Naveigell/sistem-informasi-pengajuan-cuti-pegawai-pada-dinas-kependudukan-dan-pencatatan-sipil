@@ -49,6 +49,17 @@ class Leave extends Model
         return $statuses[$this->status];
     }
 
+    public static function getStatusFormattedStatic($status)
+    {
+        $statuses = [
+            self::STATUS_APPROVED => 'Diterima',
+            self::STATUS_IN_PROGRESS => 'Sedang diproses',
+            self::STATUS_REJECTED => 'Ditolak',
+        ];
+
+        return $statuses[$status];
+    }
+
     public function getStatusClassFormattedAttribute()
     {
         $statuses = [

@@ -4,11 +4,9 @@ namespace App\Http\Controllers\Admin\Leaves;
 
 use App\Http\Controllers\Controller;
 use App\Models\Leave;
-use App\Models\LeaveApproved;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 
-class PendingLeaveController extends Controller
+class LeaveController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -17,31 +15,9 @@ class PendingLeaveController extends Controller
      */
     public function index()
     {
-        $leaves = Leave::with('user', 'leaveApproveds.user')->isInProgress()->latest()->paginate(10);
+        $leaves = Leave::with('user', 'leaveApproveds')->latest()->paginate(10);
 
-        return view('admin.pages.leave.pending.index', compact('leaves'));
-    }
-
-    public function status(Leave $leave, $status)
-    {
-        DB::transaction(function () use ($leave, $status) {
-            LeaveApproved::updateOrCreate([
-                "leave_id" => $leave->id,
-                "user_id" => auth()->id(),
-            ], [
-                "status" => $status,
-            ]);
-
-            if ($leave->isInProgressWithAllLeader()) {
-                $leave->update(['status' => Leave::STATUS_IN_PROGRESS]);
-            } elseif ($leave->isApprovedWithAllLeader()) {
-                $leave->update(['status' => Leave::STATUS_APPROVED]);
-            } else {
-                $leave->update(['status' => Leave::STATUS_REJECTED]);
-            }
-        });
-
-        return redirect(route('admin.leaves.request.pending.index'))->with('success', "Ubah status: {$status} berhasil");
+        return view('admin.pages.leave.index', compact('leaves'));
     }
 
     /**

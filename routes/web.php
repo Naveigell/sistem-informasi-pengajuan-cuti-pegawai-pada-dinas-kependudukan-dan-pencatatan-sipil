@@ -23,6 +23,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
             ->name('pending.status.update')
             ->whereIn('status', [\App\Models\Leave::STATUS_APPROVED, \App\Models\Leave::STATUS_REJECTED]);
         Route::resource('pending', \App\Http\Controllers\Admin\Leaves\PendingLeaveController::class)->parameter('pending', 'leave');
+        Route::resource('leaves', \App\Http\Controllers\Admin\Leaves\LeaveController::class);
     });
 });
 
@@ -31,6 +32,8 @@ Route::prefix('employee')->name('employee.')->group(function () {
     Route::resource('leaves', \App\Http\Controllers\Employee\LeaveController::class)
         ->only('store', 'index', 'create')
         ->parameter('leaves', 'leave');
+    Route::patch('biodatas/password', [\App\Http\Controllers\Employee\BiodataController::class, 'password'])->name('biodatas.password');
+    Route::resource('biodatas', \App\Http\Controllers\Employee\BiodataController::class);
 });
 
 Route::prefix('login')->name('login.')->group(function () {

@@ -79,4 +79,9 @@ class User extends Authenticatable
     {
         return $this->role == self::ROLE_ADMIN;
     }
+
+    public function isLeader()
+    {
+        return in_array($this->role, [self::ROLE_HEAD_OF_FIELD, self::ROLE_HEAD_OF_DEPARTMENT]);
+    }
 }
