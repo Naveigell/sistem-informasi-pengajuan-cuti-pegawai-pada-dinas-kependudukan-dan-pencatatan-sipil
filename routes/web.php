@@ -25,6 +25,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::resource('pending', \App\Http\Controllers\Admin\Leaves\PendingLeaveController::class)->parameter('pending', 'leave');
         Route::resource('leaves', \App\Http\Controllers\Admin\Leaves\LeaveController::class);
     });
+    Route::resource('reports', \App\Http\Controllers\Admin\ReportController::class)->only('index', 'create');
 });
 
 Route::prefix('employee')->name('employee.')->group(function () {

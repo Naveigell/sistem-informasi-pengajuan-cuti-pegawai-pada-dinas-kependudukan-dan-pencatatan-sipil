@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Leave;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class DashboardController extends Controller
@@ -14,7 +16,13 @@ class DashboardController extends Controller
      */
     public function index()
     {
-        return view('admin.pages.dashboard.index');
+
+        $totalLeavesPending  = Leave::where('status', Leave::STATUS_IN_PROGRESS)->count();
+        $totalLeavesApproved = Leave::where('status', Leave::STATUS_APPROVED)->count();
+        $totalLeavesRejected = Leave::where('status', Leave::STATUS_REJECTED)->count();
+        $totalEmployee = User::employee()->count();
+
+        return view('admin.pages.dashboard.index', compact('totalLeavesPending', 'totalLeavesApproved', 'totalLeavesRejected', 'totalEmployee'));
     }
 
     /**

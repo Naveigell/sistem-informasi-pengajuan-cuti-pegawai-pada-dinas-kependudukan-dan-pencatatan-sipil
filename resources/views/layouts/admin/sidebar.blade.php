@@ -17,6 +17,10 @@
                 <li class="@if (request()->routeIs('admin.leaves.request.pending.*')) active @endif"><a class="nav-link" href="{{ route('admin.leaves.request.pending.index') }}"><i class="fas fa-clock"></i> <span>Pending</span></a></li>
                 <li class="@if (request()->routeIs('admin.leaves.request.leaves.*')) active @endif"><a class="nav-link" href="{{ route('admin.leaves.request.leaves.index') }}"><i class="fas fa-envelope"></i> <span>Semua Cuti</span></a></li>
             @endif
+            @if(auth()->user()->isAdmin())
+                <li class="menu-header">Laporan</li>
+                <li class="@if (request()->routeIs('admin.reports.*')) active @endif"><a class="nav-link" href="{{ route('admin.reports.index') }}"><i class="fas fa-print"></i> <span>Laporan</span></a></li>
+            @endif
         </ul>
     </aside>
 </div>
