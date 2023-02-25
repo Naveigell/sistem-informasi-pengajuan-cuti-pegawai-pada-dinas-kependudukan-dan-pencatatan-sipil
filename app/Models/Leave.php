@@ -40,6 +40,31 @@ class Leave extends Model
         }
     }
 
+    public static function notifyLeaveRemainingToAllUsers()
+    {
+        $notifications = [];
+        $users = User::employee()->with(['leaves' => function ($query) {
+            $query->where('status', Leave::STATUS_APPROVED);
+        }])->get();
+
+        foreach ($users as $user) {
+            $leaveRemaining = Leave::getLeaveRemaining($user->leaves->sum('total_day'));
+
+            if ($leaveRemaining == 0) {
+                continue;
+            }
+
+            $notifications[] = [
+                "user_id" => $user->id,
+                "description" => "Sisa cuti kamu tinggal {$leaveRemaining}, jangan lupa untuk menggunakan sisa cuti kamu",
+                "created_at" => now()->toDateTimeString(),
+                "updated_at" => now()->toDateTimeString(),
+            ];
+        }
+
+        UserNotification::insert($notifications);
+    }
+
     public static function isInMaxLeave($amount)
     {
         return $amount >= self::MAX_LEAVE;
