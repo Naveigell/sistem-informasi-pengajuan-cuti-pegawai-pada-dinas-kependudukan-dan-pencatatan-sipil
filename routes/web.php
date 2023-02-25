@@ -14,7 +14,7 @@ use Illuminate\Support\Facades\Route;
 */
 Route::redirect('/', '/login')->name('index');
 
-Route::prefix('admin')->name('admin.')->group(function () {
+Route::prefix('admin')->middleware('redirect.to.login.if.not.authenticated')->name('admin.')->group(function () {
     Route::resource('dashboard', \App\Http\Controllers\Admin\DashboardController::class);
     Route::resource('employees', \App\Http\Controllers\Admin\EmployeeController::class)->except('show');
     Route::resource('employees.leaves', \App\Http\Controllers\Admin\LeaveController::class)->only('index')->parameter('leaves', 'leave');
@@ -28,7 +28,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
     Route::resource('reports', \App\Http\Controllers\Admin\ReportController::class)->only('index', 'create');
 });
 
-Route::prefix('employee')->name('employee.')->group(function () {
+Route::prefix('employee')->middleware('redirect.to.login.if.not.authenticated')->name('employee.')->group(function () {
     Route::resource('dashboard', \App\Http\Controllers\Employee\DashboardController::class);
     Route::resource('leaves', \App\Http\Controllers\Employee\LeaveController::class)
         ->only('store', 'index', 'create')
@@ -42,10 +42,10 @@ Route::prefix('login')->name('login.')->group(function () {
     Route::view('/', 'auth.login')->name('index');
 });
 
-Route::prefix('register')->name('register.')->group(function () {
-    Route::post('/', [\App\Http\Controllers\Auth\RegisterController::class, 'register'])->name('store');
-    Route::view('/', 'auth.register')->name('index');
-});
+//Route::prefix('register')->name('register.')->group(function () {
+//    Route::post('/', [\App\Http\Controllers\Auth\RegisterController::class, 'register'])->name('store');
+//    Route::view('/', 'auth.register')->name('index');
+//});
 
 Route::get('/logout', function () {
     auth()->logout();

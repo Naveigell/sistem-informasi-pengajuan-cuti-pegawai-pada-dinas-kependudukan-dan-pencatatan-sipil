@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Admin\Leaves;
 use App\Http\Controllers\Controller;
 use App\Models\Leave;
 use App\Models\LeaveApproved;
+use App\Models\User;
+use App\Models\UserNotification;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -24,7 +26,13 @@ class PendingLeaveController extends Controller
 
     public function status(Leave $leave, $status)
     {
-        DB::transaction(function () use ($leave, $status) {
+        $amount = Leave::where('user_id', $leave->user_id)->where('status', Leave::STATUS_APPROVED)->sum('total_day');
+
+        if (Leave::isInMaxLeave($amount)) {
+            return redirect(route('admin.leaves.request.pending.index'))->with('error', "Sisa cuti pegawai tersebut sudah habis");
+        }
+
+        DB::transaction(function () use ($leave, $status, $amount) {
             LeaveApproved::updateOrCreate([
                 "leave_id" => $leave->id,
                 "user_id" => auth()->id(),
@@ -34,12 +42,18 @@ class PendingLeaveController extends Controller
 
             if ($leave->isInProgressWithAllLeader()) {
                 $leave->update(['status' => Leave::STATUS_IN_PROGRESS]);
-            } elseif ($leave->isApprovedWithAllLeader()) {
+            } elseif ($leave->isApprovedWithByLeader()) {
                 $leave->update(['status' => Leave::STATUS_APPROVED]);
-            } else {
+            } elseif ($leave->isRejectedByAllLeader()) {
                 $leave->update(['status' => Leave::STATUS_REJECTED]);
             }
         });
+
+        // if approved, we notify user
+        if ($leave->isApproved()) {
+            UserNotification::notifyDescription($leave->user_id, "Cuti anda di terima");
+            UserNotification::notifyLeaveAmountToUser($leave->user_id, $amount + $leave->total_day);
+        }
 
         return redirect(route('admin.leaves.request.pending.index'))->with('success', "Ubah status: {$status} berhasil");
     }

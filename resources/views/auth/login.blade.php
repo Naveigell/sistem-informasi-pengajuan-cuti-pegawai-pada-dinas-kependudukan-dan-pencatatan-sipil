@@ -60,9 +60,9 @@
                                         <button type="submit" class="btn btn-primary btn-lg btn-block" tabindex="4">
                                             Login
                                         </button>
-                                        <a href="{{ route('register.index') }}" class="btn btn-outline-secondary btn-lg btn-block" tabindex="4">
-                                            Register
-                                        </a>
+{{--                                        <a href="{{ route('register.index') }}" class="btn btn-outline-secondary btn-lg btn-block" tabindex="4">--}}
+{{--                                            Register--}}
+{{--                                        </a>--}}
                                     </div>
                                 </form>
                             </div>

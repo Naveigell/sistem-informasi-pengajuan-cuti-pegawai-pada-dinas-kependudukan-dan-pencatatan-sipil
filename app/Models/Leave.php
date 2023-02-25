@@ -17,6 +17,8 @@ class Leave extends Model
     const STATUS_IN_PROGRESS = 'in_progress';
     const STATUS_REJECTED = 'rejected';
 
+    const MAX_LEAVE = 12;
+
     protected $fillable = ['user_id', 'filename', 'start_date', 'end_date', 'total_day', 'status'];
 
     protected $casts = [
@@ -36,6 +38,16 @@ class Leave extends Model
         } else {
             $this->attributes['filename'] = $value;
         }
+    }
+
+    public static function isInMaxLeave($amount)
+    {
+        return $amount >= self::MAX_LEAVE;
+    }
+
+    public static function getLeaveRemaining($amount)
+    {
+        return self::MAX_LEAVE - $amount;
     }
 
     public function getStatusFormattedAttribute()
@@ -83,11 +95,37 @@ class Leave extends Model
         return ($hasApprovedByOneOrMoreLeader && $hasRejectedByOneOrMoreLeader) || $this->leaveApproveds->isEmpty();
     }
 
-    public function isApprovedWithAllLeader()
+    public function isRejectedByAllLeader()
     {
-        $this->load('leaveApproveds');
+        $this->load('leaveApproveds.user');
 
-        return $this->leaveApproveds->whereNotIn('status', [LeaveApproved::STATUS_REJECTED, LeaveApproved::STATUS_IN_PROGRESS])->isEmpty();
+        $approvedOrInProgressEmpty = $this->leaveApproveds->whereIn('status', [LeaveApproved::STATUS_APPROVED, LeaveApproved::STATUS_IN_PROGRESS])->isEmpty();
+        $rejectedIsNotEmpty = $this->leaveApproveds->whereIn('status', [LeaveApproved::STATUS_REJECTED])->isNotEmpty();
+
+        $approvedByHeadOfField = $this->leaveApproveds->whereIn('status', [LeaveApproved::STATUS_REJECTED])->where('user.role', User::ROLE_HEAD_OF_FIELD)->isNotEmpty();
+        $approvedByHeadOfDepartment = $this->leaveApproveds->whereIn('status', [LeaveApproved::STATUS_REJECTED])->where('user.role', User::ROLE_HEAD_OF_DEPARTMENT)->isNotEmpty();
+
+        return $approvedOrInProgressEmpty && $rejectedIsNotEmpty &&
+            $approvedByHeadOfField && $approvedByHeadOfDepartment;
+    }
+
+    public function isApprovedWithByLeader()
+    {
+        $this->load('leaveApproveds.user');
+
+        $rejectedOrInProgressEmpty = $this->leaveApproveds->whereIn('status', [LeaveApproved::STATUS_REJECTED, LeaveApproved::STATUS_IN_PROGRESS])->isEmpty();
+        $approvedIsNotEmpty = $this->leaveApproveds->whereIn('status', [LeaveApproved::STATUS_APPROVED])->isNotEmpty();
+
+        $approvedByHeadOfField = $this->leaveApproveds->whereIn('status', [LeaveApproved::STATUS_APPROVED])->where('user.role', User::ROLE_HEAD_OF_FIELD)->isNotEmpty();
+        $approvedByHeadOfDepartment = $this->leaveApproveds->whereIn('status', [LeaveApproved::STATUS_APPROVED])->where('user.role', User::ROLE_HEAD_OF_DEPARTMENT)->isNotEmpty();
+
+        return $approvedIsNotEmpty && $rejectedOrInProgressEmpty &&
+            $approvedByHeadOfField && $approvedByHeadOfDepartment;
+    }
+
+    public function isApproved()
+    {
+        return $this->status == self::STATUS_APPROVED;
     }
 
     /**

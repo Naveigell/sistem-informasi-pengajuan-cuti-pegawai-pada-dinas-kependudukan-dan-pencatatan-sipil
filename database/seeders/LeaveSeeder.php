@@ -32,7 +32,7 @@ class LeaveSeeder extends Seeder
 
         foreach ($employees as $employee) {
 
-            foreach (range(1, rand(3, 7)) as $loop) {
+            foreach (range(1, 2) as $loop) {
                 $startDate = now()->addDays(rand(3, 5));
                 $endDate   = now()->addDays(rand(5, 8));
 

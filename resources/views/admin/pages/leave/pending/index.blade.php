@@ -6,6 +6,9 @@
     @if ($message = session()->get('success'))
         <x-alert.success :message="$message"></x-alert.success>
     @endif
+    @if($message = session()->get('error'))
+        <x-alert.danger :message="$message"></x-alert.danger>
+    @endif
     <div class="col-lg-12 col-md-12 col-12 col-sm-12 no-padding-margin">
         <div class="card">
             <div class="card-header">
@@ -21,6 +24,7 @@
                             <th class="col-1">File Pengajuan Cuti</th>
                             <th class="col-2">Dari Tanggal</th>
                             <th class="col-2">Sampai Tanggal</th>
+                            <th class="col-2">Total Hari</th>
                             <th class="col-1">Disetujui Oleh</th>
                             <th class="col-1">Tidak Disetujui Oleh</th>
                             <th class="col-1">Status</th>
@@ -37,6 +41,7 @@
                                 <td><a href="{{ asset('storage/employees/leaves/' . $leave->filename) }}" class="">Download</a></td>
                                 <td>{{ $leave->start_date->format('d F Y') }}</td>
                                 <td>{{ $leave->end_date->format('d F Y') }}</td>
+                                <td>{{ $leave->total_day }}</td>
                                 <td>
                                     @forelse($leave->leaveApproveds->where('status', \App\Models\Leave::STATUS_APPROVED) as $approved)
                                         <span class="badge badge-success d-inline-block mb-1 mt-1">{{ $approved->user->name }}</span>
@@ -61,7 +66,7 @@
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="8" style="text-align: center;">Data Empty</td>
+                                <td colspan="10" style="text-align: center;">Data Empty</td>
                             </tr>
                         @endforelse
                         </tbody>
