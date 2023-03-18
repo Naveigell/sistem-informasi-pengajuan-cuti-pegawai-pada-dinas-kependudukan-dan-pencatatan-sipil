@@ -153,6 +153,11 @@ class Leave extends Model
         return $this->status == self::STATUS_APPROVED;
     }
 
+    public function isRejected()
+    {
+        return $this->status == self::STATUS_REJECTED;
+    }
+
     /**
      * @param Builder $query
      * @return void

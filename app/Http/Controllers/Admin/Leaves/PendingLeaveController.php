@@ -51,8 +51,10 @@ class PendingLeaveController extends Controller
 
         // if approved, we notify user
         if ($leave->isApproved()) {
-            UserNotification::notifyDescription($leave->user_id, "Cuti anda di terima");
+            UserNotification::notifyDescription($leave->user_id, "<div class='alert alert-success alert-dismissible show fade'><div class='alert-body'><button class='close' data-dismiss='alert'><span>×</span></button>Permohonan <b class='text text-dark'>Cuti</b> anda dari tanggal {$leave->start_date->format('d F Y')} sampai {$leave->end_date->format('d F Y')} telah <b class='text text-dark'>diterima</b></div></div>");
             UserNotification::notifyLeaveAmountToUser($leave->user_id, $amount + $leave->total_day);
+        } elseif ($leave->isRejected()) {
+            UserNotification::notifyDescription($leave->user_id, "<div class='alert alert-danger alert-dismissible show fade'><div class='alert-body'><button class='close' data-dismiss='alert'><span>×</span></button>Permohonan <b class='text text-dark'>Cuti</b> anda dari tanggal {$leave->start_date->format('d F Y')} sampai {$leave->end_date->format('d F Y')} telah <b class='text text-dark'>ditolak</b></div></div>");
         }
 
         return redirect(route('admin.leaves.request.pending.index'))->with('success', "Ubah status: {$status} berhasil");

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Employee;
 
 use App\Http\Controllers\Controller;
 use App\Models\Leave;
+use App\Models\UserNotification;
 use Illuminate\Http\Request;
 
 class DashboardController extends Controller
@@ -19,7 +20,9 @@ class DashboardController extends Controller
         $totalLeavesApproved = Leave::where('user_id', auth()->id())->where('status', Leave::STATUS_APPROVED)->count();
         $totalLeavesRejected = Leave::where('user_id', auth()->id())->where('status', Leave::STATUS_REJECTED)->count();
 
-        return view('employee.pages.dashboard.index', compact('totalLeavesPending', 'totalLeavesApproved', 'totalLeavesRejected'));
+        $leaveNotifications = UserNotification::where('user_id', auth()->id())->get();
+
+        return view('employee.pages.dashboard.index', compact('totalLeavesPending', 'totalLeavesApproved', 'totalLeavesRejected', 'leaveNotifications'));
     }
 
     /**
