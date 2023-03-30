@@ -15,30 +15,30 @@
     </style>
     <ul class="navbar-nav navbar-right">
         <li class="dropdown dropdown-list-toggle">
-{{--            <a href="#" data-toggle="dropdown" class="nav-link notification-toggle nav-link-lg beep position-relative">--}}
-{{--                <i class="far fa-bell"></i>--}}
-{{--                @if ($notifications->count() > 0)--}}
-{{--                    <a class="position-absolute d-inline-block bg-danger text-white" style="top: -3px; right: -5px; line-height: normal; padding: 2px 7px 2px 7px; border-radius: 100px;">{{ $notifications->count() }}</a>--}}
-{{--                @endif--}}
-{{--            </a>--}}
-{{--            <div class="dropdown-menu dropdown-list dropdown-menu-right">--}}
-{{--                <div class="dropdown-header">--}}
-{{--                    Notifications--}}
-{{--                </div>--}}
-{{--                <div class="dropdown-list-content dropdown-list-icons dropdown-no-after">--}}
-{{--                    @foreach($notifications as $notification)--}}
-{{--                        <a class="dropdown-item dropdown-item-unread">--}}
-{{--                            <div class="dropdown-item-icon bg-primary text-white">--}}
-{{--                                <i class="fas fa-exclamation-triangle"></i>--}}
-{{--                            </div>--}}
-{{--                            <div class="dropdown-item-desc">--}}
-{{--                                {{ $notification->description }}--}}
-{{--                                <div class="time text-primary">{{ $notification->created_at->diffForHumans() }}</div>--}}
-{{--                            </div>--}}
-{{--                        </a>--}}
-{{--                    @endforeach--}}
-{{--                </div>--}}
-{{--            </div>--}}
+            <a href="#" data-toggle="dropdown" class="nav-link notification-toggle nav-link-lg beep position-relative">
+                <i class="far fa-bell"></i>
+                @if ($notifications->count() > 0)
+                    <a class="position-absolute d-inline-block bg-danger text-white" style="top: -3px; right: -5px; line-height: normal; padding: 2px 7px 2px 7px; border-radius: 100px;">{{ $notifications->count() }}</a>
+                @endif
+            </a>
+            <div class="dropdown-menu dropdown-list dropdown-menu-right">
+                <div class="dropdown-header">
+                    Notifications
+                </div>
+                <div class="dropdown-list-content dropdown-list-icons dropdown-no-after">
+                    @foreach($notifications as $notification)
+                        <a class="dropdown-item dropdown-item-unread">
+                            <div class="dropdown-item-icon bg-primary text-white">
+                                <i class="fas fa-exclamation-triangle"></i>
+                            </div>
+                            <div class="dropdown-item-desc">
+                                {!! str_replace('×', '', strip_tags($notification->description)) !!}
+                                <div class="time text-primary">{{ $notification->created_at->diffForHumans() }}</div>
+                            </div>
+                        </a>
+                    @endforeach
+                </div>
+            </div>
         </li>
         <li class="dropdown">
             <a href="#" data-toggle="dropdown" class="nav-link dropdown-toggle nav-link-lg nav-link-user">
