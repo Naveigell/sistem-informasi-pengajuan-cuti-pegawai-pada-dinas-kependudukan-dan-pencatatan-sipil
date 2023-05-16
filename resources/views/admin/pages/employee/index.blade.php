@@ -10,9 +10,11 @@
         <div class="card">
             <div class="card-header">
                 <h4>Pegawai</h4>
-                <div class="card-header-action">
-                    <a href="{{ route('admin.employees.create') }}" class="btn btn-primary"><i class="fa fa-plus"></i> Tambah Pegawai</a>
-                </div>
+                @if(auth()->user()->isAdmin())
+                    <div class="card-header-action">
+                        <a href="{{ route('admin.employees.create') }}" class="btn btn-primary"><i class="fa fa-plus"></i> Tambah Pegawai</a>
+                    </div>
+                @endif
             </div>
             <div class="card-body p-0">
                 <div class="table-responsive">

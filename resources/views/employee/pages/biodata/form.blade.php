@@ -16,8 +16,26 @@
                     <form action="{{ route('employee.biodatas.store') }}" method="post" class="">
                         @csrf
                         <div class="form-group">
+                            <label>Nip</label>
+                            <input disabled type="text" class="form-control @error('nip') is-invalid @enderror" name="nip" value="{{ old('nip', @$user ? $user->biodata->nip : '') }}">
+                            @error('nip')
+                            <div class="invalid-feedback">
+                                {{ $message }}
+                            </div>
+                            @enderror
+                        </div>
+                        <div class="form-group">
+                            <label>Jabatan</label>
+                            <input disabled type="text" class="form-control @error('role') is-invalid @enderror" name="role" value="{{ old('role', @$user ? $user->role_translated : '') }}">
+                            @error('role')
+                            <div class="invalid-feedback">
+                                {{ $message }}
+                            </div>
+                            @enderror
+                        </div>
+                        <div class="form-group">
                             <label>Nama</label>
-                            <input type="text" class="form-control @error('name') is-invalid @enderror" name="name" value="{{ old('name', @$user ? $user->name : '') }}">
+                            <input disabled type="text" class="form-control @error('name') is-invalid @enderror" name="name" value="{{ old('name', @$user ? $user->name : '') }}">
                             @error('name')
                             <div class="invalid-feedback">
                                 {{ $message }}
@@ -26,7 +44,7 @@
                         </div>
                         <div class="form-group">
                             <label>Username</label>
-                            <input type="text" class="form-control @error('username') is-invalid @enderror" name="username" value="{{ old('username', @$user ? $user->username : '') }}">
+                            <input disabled type="text" class="form-control @error('username') is-invalid @enderror" name="username" value="{{ old('username', @$user ? $user->username : '') }}">
                             @error('username')
                             <div class="invalid-feedback">
                                 {{ $message }}
@@ -53,7 +71,7 @@
                         </div>
                         <div class="form-group">
                             <label>Alamat</label>
-                            <textarea name="address" id="" cols="30" rows="10" class="form-control @error('address') is-invalid @enderror" style="min-height: 250px; resize: none;">{{ old('address', @$user ? $user->biodata->address : '') }}</textarea>
+                            <textarea disabled name="address" id="" cols="30" rows="10" class="form-control @error('address') is-invalid @enderror" style="min-height: 250px; resize: none;">{{ old('address', @$user ? $user->biodata->address : '') }}</textarea>
                             @error('address')
                             <div class="invalid-feedback">
                                 {{ $message }}

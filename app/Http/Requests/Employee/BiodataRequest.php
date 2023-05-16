@@ -15,17 +15,22 @@ class BiodataRequest extends FormRequest
     public function rules()
     {
         /* @var User $employee */
-        $employee = auth()->user();
+        $employee = auth()->user()->load('biodata');
 
         $rules = [
-            "name" => "required|string|max:50",
-            "username" => "required|unique:users|string|max:60",
+//            "name" => "required|string|max:50",
+//            "nip" => "required|unique:biodatas|string|max:60",
+//            "username" => "required|unique:users|string|max:60",
             "email" => "required|unique:users|string|max:70",
             "phone" => "required|string|regex:/(08)[0-9]{5,17}/",
-            "address" => "required|string|max:255",
+//            "address" => "required|string|max:255",
         ];
 
         if ($this->isMethod('post')) {
+//            if ($this->nip == $employee->biodata->nip) {
+//                $rules['nip'] = 'required|string|max:60';
+//            }
+
             if ($this->username == $employee->username) {
                 $rules['username'] = 'required|string|max:60';
             }

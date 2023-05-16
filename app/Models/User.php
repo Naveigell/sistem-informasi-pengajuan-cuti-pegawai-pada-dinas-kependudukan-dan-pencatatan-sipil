@@ -30,7 +30,7 @@ class User extends Authenticatable
     const ROLE_ADMIN              = 'admin';
     const ROLE_HEAD_OF_FIELD      = 'head_of_field';
     const ROLE_HEAD_OF_DEPARTMENT = 'head_of_department';
-    const ROLE_EMPLOYEE            = 'employee';
+    const ROLE_EMPLOYEE           = 'employee';
 
     /**
      * The attributes that should be hidden for serialization.
@@ -59,6 +59,16 @@ class User extends Authenticatable
     public function leaves()
     {
         return $this->hasMany(Leave::class);
+    }
+
+    public function getRoleTranslatedAttribute()
+    {
+        return [
+            self::ROLE_ADMIN => "Admin",
+            self::ROLE_HEAD_OF_FIELD => "Kepala Bidang",
+            self::ROLE_HEAD_OF_DEPARTMENT => "Kepala Dinas",
+            self::ROLE_EMPLOYEE => "Pegawai",
+        ][$this->role];
     }
 
     public function setPasswordAttribute($value)

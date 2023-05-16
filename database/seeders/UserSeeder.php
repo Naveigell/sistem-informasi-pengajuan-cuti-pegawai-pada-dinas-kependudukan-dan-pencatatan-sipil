@@ -86,7 +86,8 @@ class UserSeeder extends Seeder
         foreach ($users as $user) {
             $biodatas[] = [
                 "user_id" => $user->id,
-                "phone" => "08" . $faker->numerify('#########'),
+                "nip" => $faker->unique()->numerify('################'),
+                "phone" => "08" . $faker->unique()->numerify('#########'),
                 "address" => $faker->address,
                 "created_at" => now()->toDateTimeString(),
                 "updated_at" => now()->toDateTimeString(),
