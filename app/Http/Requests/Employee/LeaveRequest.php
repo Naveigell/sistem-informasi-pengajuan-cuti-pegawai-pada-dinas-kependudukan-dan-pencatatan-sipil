@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests\Employee;
 
+use App\Models\Leave;
 use Carbon\Carbon;
 use Illuminate\Foundation\Http\FormRequest;
 
@@ -16,11 +17,17 @@ class LeaveRequest extends FormRequest
     {
         $moreThan4Days = now()->addDays(4)->format('d-m-Y');
 
-        return [
-            "filename" => "required|file|mimes:pdf,docx,png,jpg,jpeg",
+        $rules = [
+            "leave_type" => "required|string|in:" . join(',', array_keys(Leave::getAllLeaveTypes())),
             "start_date" => "required|date|after:{$moreThan4Days}",
-            "end_date" => "required|date|after:start_date",
+            "reason" => "required|string|max:15000",
         ];
+
+        if (in_array($this->leave_type, [Leave::LEAVE_TYPE_ANNUAL_LEAVE])) {
+            $rules["end_date"] = "required|date|after:start_date";
+        }
+
+        return $rules;
     }
 
     public function getLeaveTotalDays()

@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use Barryvdh\DomPDF\Facade\Pdf;
+use Faker\Provider\Uuid;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -17,9 +19,14 @@ class Leave extends Model
     const STATUS_IN_PROGRESS = 'in_progress';
     const STATUS_REJECTED = 'rejected';
 
+    const LEAVE_TYPE_ANNUAL_LEAVE = 'annual_leave';
+    const LEAVE_TYPE_SICK_LEAVE = 'sick_leave';
+    const LEAVE_TYPE_MATERNITY_LEAVE = 'maternity_leave';
+    const LEAVE_TYPE_BIG_LEAVE = 'big_leave';
+
     const MAX_LEAVE = 12;
 
-    protected $fillable = ['user_id', 'filename', 'start_date', 'end_date', 'total_day', 'status'];
+    protected $fillable = ['user_id', 'leave_type', 'filename', 'start_date', 'end_date', 'total_day', 'reason', 'status'];
 
     protected $casts = [
         'start_date' => 'datetime',
@@ -32,6 +39,7 @@ class Leave extends Model
 
             $filename = Str::random(50) . uniqid() . date('dmYHis') . '.pdf';
 
+            // should be stored in private folder
             Storage::putFileAs('public/employees/leaves/', $value, $filename);
 
             $this->attributes['filename'] = $filename;
@@ -63,6 +71,37 @@ class Leave extends Model
         }
 
         UserNotification::insert($notifications);
+    }
+
+    public static function generateLeavePdf($data)
+    {
+        $filename = Uuid::uuid() . '.pdf';
+
+        $pdf = Pdf::loadView('employee.pages.leave.pdf', $data);
+        $output = $pdf->download()->getOriginalContent();
+
+        // should be stored in private foldr
+        Storage::put("public/employees/leaves/{$filename}", $output);
+    }
+
+    public static function getAllLeaveTypes()
+    {
+        return [
+            self::LEAVE_TYPE_ANNUAL_LEAVE => "Cuti Tahunan",
+            self::LEAVE_TYPE_BIG_LEAVE => "Cuti Besar",
+            self::LEAVE_TYPE_MATERNITY_LEAVE => "Cuti Hamil",
+            self::LEAVE_TYPE_SICK_LEAVE => "Cuti Sakit",
+        ];
+    }
+
+    public static function getLeaveAmountText($value)
+    {
+        return array_combine(array_keys(self::getAllLeaveTypes()), ["12 hari", "3 bulan", "3 bulan", "Tidak ada"])[$value];
+    }
+
+    public static function getLeaveType($value)
+    {
+        return self::getAllLeaveTypes()[$value];
     }
 
     public static function isInMaxLeave($amount)

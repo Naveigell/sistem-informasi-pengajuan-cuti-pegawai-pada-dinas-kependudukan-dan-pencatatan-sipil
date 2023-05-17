@@ -16,10 +16,12 @@ return new class extends Migration
         Schema::create('leaves', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained('users')->cascadeOnUpdate()->cascadeOnDelete();
+            $table->string('leave_type');
             $table->string('filename');
             $table->dateTime('start_date');
             $table->dateTime('end_date');
             $table->unsignedInteger('total_day');
+            $table->text('reason');
             $table->string('status');
             $table->timestamps();
         });

@@ -46,10 +46,12 @@ class LeaveSeeder extends Seeder
 
                 $leaves[] = [
                     "user_id" => $employee->id,
+                    "leave_type" => Arr::random(Leave::getAllLeaveTypes()),
                     "filename" => $filename,
                     "start_date" => $startDate->toDateTimeString(),
                     "end_date" => $endDate->toDateTimeString(),
                     "total_day" => $totaDays,
+                    "reason" => $faker->realText,
                     "status" => Arr::random($statuses),
                     "created_at" => now()->toDateTimeString(),
                     "updated_at" => now()->toDateTimeString(),
