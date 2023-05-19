@@ -83,7 +83,7 @@
     <script>
         $('.trigger--modal-aggrement').on('click', function () {
             $('#modal-aggrement .modal-title').html($(this).data('title'));
-            $('#modal-aggrement .modal-body').html($(this).data('body'));
+            $('#modal-aggrement .modal-body #body').html($(this).data('body'));
             $('#modal-aggrement form').attr('action', $(this).data('route'));
         })
     </script>

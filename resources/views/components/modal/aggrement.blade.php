@@ -8,7 +8,14 @@
                     <h5 class="modal-title"></h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
                 </div>
-                <div class="modal-body"></div>
+                <div class="modal-body">
+                    <div id="body"></div>
+                    <div class="form-group mt-4">
+                        <label for="">Keterangan</label>
+                        <input type="text" class="form-control" name="description" id="description">
+                        <small class="text text-muted">* Keterangan boleh dikosongkan</small>
+                    </div>
+                </div>
                 <div class="modal-footer">
                     <button type="submit" class="btn btn-primary btn-shadow" id="">Iya</button>
                     <button type="button" class="btn btn-secondary" id="" data-dismiss="modal" aria-label="Close">Batalkan</button>

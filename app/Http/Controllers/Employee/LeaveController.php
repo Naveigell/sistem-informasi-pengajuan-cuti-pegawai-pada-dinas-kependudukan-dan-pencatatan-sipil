@@ -48,15 +48,19 @@ class LeaveController extends Controller
      */
     public function store(LeaveRequest $request)
     {
-//        if ($request->leave_type == Leave::LEAVE_TYPE_ANNUAL_LEAVE) {
-//            Leave::create(array_merge(
-//                $request->validated(), [
-//                    "user_id" => auth()->id(),
-//                    "status" => Leave::STATUS_IN_PROGRESS,
-//                    "total_day" => $request->getLeaveTotalDays(),
-//                ]
-//            ));
-//        }
+        $validated = array_merge(
+            $request->validated(), $request->only('end_date'), [
+                "user_id" => auth()->id(),
+                "status" => Leave::STATUS_IN_PROGRESS,
+                "total_day" => $request->getLeaveTotalDays(),
+                "name" => auth()->user()->name,
+                "nip"  => auth()->user()->biodata->nip,
+            ]
+        );
+
+        $leave = new Leave($validated);
+        $leave->generateLeavePdf($validated);
+        $leave->save();
 
         return redirect(route('employee.leaves.index'))->with('success', 'Berhasil mengajukan cuti');
     }

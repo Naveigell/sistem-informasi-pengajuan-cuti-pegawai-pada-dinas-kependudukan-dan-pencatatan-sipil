@@ -73,7 +73,7 @@ class Leave extends Model
         UserNotification::insert($notifications);
     }
 
-    public static function generateLeavePdf($data)
+    public function generateLeavePdf($data)
     {
         $filename = Uuid::uuid() . '.pdf';
 
@@ -82,6 +82,8 @@ class Leave extends Model
 
         // should be stored in private foldr
         Storage::put("public/employees/leaves/{$filename}", $output);
+
+        $this->attributes['filename'] = $filename;
     }
 
     public static function getAllLeaveTypes()
@@ -149,7 +151,7 @@ class Leave extends Model
 
     public function isInProgressWithAllLeader()
     {
-        $this->load('leaveApproveds');
+        $this->loadLeaveApproveds();
 
         $hasApprovedByOneOrMoreLeader = $this->leaveApproveds->whereIn('status', [LeaveApproved::STATUS_APPROVED])->isNotEmpty();
         $hasRejectedByOneOrMoreLeader = $this->leaveApproveds->whereIn('status', [LeaveApproved::STATUS_REJECTED])->isNotEmpty();
@@ -161,7 +163,7 @@ class Leave extends Model
 
     public function isRejectedByAllLeader()
     {
-        $this->load('leaveApproveds.user');
+        $this->loadLeaveApproveds();
 
         $approvedOrInProgressEmpty = $this->leaveApproveds->whereIn('status', [LeaveApproved::STATUS_APPROVED, LeaveApproved::STATUS_IN_PROGRESS])->isEmpty();
         $rejectedIsNotEmpty = $this->leaveApproveds->whereIn('status', [LeaveApproved::STATUS_REJECTED])->isNotEmpty();
@@ -175,7 +177,7 @@ class Leave extends Model
 
     public function isApprovedWithByLeader()
     {
-        $this->load('leaveApproveds.user');
+        $this->loadLeaveApproveds();
 
         $rejectedOrInProgressEmpty = $this->leaveApproveds->whereIn('status', [LeaveApproved::STATUS_REJECTED, LeaveApproved::STATUS_IN_PROGRESS])->isEmpty();
         $approvedIsNotEmpty = $this->leaveApproveds->whereIn('status', [LeaveApproved::STATUS_APPROVED])->isNotEmpty();
@@ -185,6 +187,48 @@ class Leave extends Model
 
         return $approvedIsNotEmpty && $rejectedOrInProgressEmpty &&
             $approvedByHeadOfField && $approvedByHeadOfDepartment;
+    }
+
+    public function isApprovedByHeadOfDepartment()
+    {
+        return $this->whereApprovedBy(User::ROLE_HEAD_OF_DEPARTMENT);
+    }
+
+    public function isApprovedByHeadOfField()
+    {
+        return $this->whereApprovedBy(User::ROLE_HEAD_OF_FIELD);
+    }
+
+    public function isRejectedByHeadOfDepartment()
+    {
+        return $this->whereApprovedBy(User::ROLE_HEAD_OF_DEPARTMENT, LeaveApproved::STATUS_REJECTED);
+    }
+
+    public function isRejectedByHeadOfField()
+    {
+        return $this->whereApprovedBy(User::ROLE_HEAD_OF_FIELD, LeaveApproved::STATUS_REJECTED);
+    }
+
+    public function whereApprovedBy($role, $status = LeaveApproved::STATUS_APPROVED)
+    {
+        $this->loadLeaveApproveds();
+
+        return $this->leaveApproveds->where('status', $status)->where('user.role', $role)->count() > 0;
+    }
+
+    /**
+     * Get first leave approved message by role
+     *
+     * @param $role
+     * @return LeaveApproved|null
+     */
+    public function getLeaveApprovedMessage($role)
+    {
+        $this->loadLeaveApproveds();
+
+        return optional($this->leaveApproveds->filter(function ($leaveApproved) use ($role) {
+            return in_array(optional($leaveApproved->user)->role, [$role]);
+        })->first())->description;
     }
 
     public function isApproved()
@@ -224,5 +268,12 @@ class Leave extends Model
     public function user()
     {
         return $this->belongsTo(User::class);
+    }
+
+    private function loadLeaveApproveds()
+    {
+        if (!$this->relationLoaded('leaveApproveds')) {
+            $this->load('leaveApproveds.user');
+        }
     }
 }

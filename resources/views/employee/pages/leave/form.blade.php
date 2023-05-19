@@ -16,7 +16,7 @@
                         <select name="leave_type" id="leave-type" class="form-control @error('leave_type') is-invalid @enderror">
                             <x-nothing-selected></x-nothing-selected>
                             @foreach(array_keys(\App\Models\Leave::getAllLeaveTypes()) as $leaveType)
-                                <option @if(old('leave_type') == $leaveType) selected @endif @if($leaveType == \App\Models\Leave::LEAVE_TYPE_ANNUAL_LEAVE) data-need-date="true" @endif value="{{ $leaveType }}">{{ \App\Models\Leave::getLeaveType($leaveType) }} ({{ \App\Models\Leave::getLeaveAmountText($leaveType) }})</option>
+                                <option @if(old('leave_type') == $leaveType) selected @endif @if(in_array($leaveType, [\App\Models\Leave::LEAVE_TYPE_ANNUAL_LEAVE, \App\Models\Leave::LEAVE_TYPE_SICK_LEAVE])) data-need-date="true" @endif value="{{ $leaveType }}">{{ \App\Models\Leave::getLeaveType($leaveType) }} ({{ \App\Models\Leave::getLeaveAmountText($leaveType) }})</option>
                             @endforeach
                         </select>
                         @error('leave_type')
@@ -74,7 +74,7 @@
             }
         })
     </script>
-    @if(old('leave_type') == \App\Models\Leave::LEAVE_TYPE_ANNUAL_LEAVE)
+    @if(in_array(old('leave_type'), [\App\Models\Leave::LEAVE_TYPE_ANNUAL_LEAVE, \App\Models\Leave::LEAVE_TYPE_SICK_LEAVE]))
         <script>
             $('#container-need-date').show();
         </script>

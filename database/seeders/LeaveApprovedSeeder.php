@@ -5,6 +5,7 @@ namespace Database\Seeders;
 use App\Models\Leave;
 use App\Models\LeaveApproved;
 use App\Models\User;
+use Faker\Factory;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Arr;
@@ -18,6 +19,7 @@ class LeaveApprovedSeeder extends Seeder
      */
     public function run()
     {
+        $faker  = Factory::create('id_ID');
         $leaves = Leave::all();
         $roles  = [User::ROLE_HEAD_OF_FIELD, User::ROLE_HEAD_OF_DEPARTMENT];
         $users  = User::whereIn('role', $roles)->get();
@@ -31,6 +33,7 @@ class LeaveApprovedSeeder extends Seeder
                     "user_id" => $users->where('role', Arr::random($roles))->random()->id,
                 ], [
                     "status" => Arr::random($statuses),
+                    "description" => $faker->realText,
                 ]);
             }
         }

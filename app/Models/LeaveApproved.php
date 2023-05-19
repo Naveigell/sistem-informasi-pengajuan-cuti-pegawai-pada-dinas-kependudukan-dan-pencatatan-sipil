@@ -13,7 +13,7 @@ class LeaveApproved extends Model
     const STATUS_IN_PROGRESS = 'in_progress';
     const STATUS_REJECTED = 'rejected';
 
-    protected $fillable = ['leave_id', 'user_id', 'status'];
+    protected $fillable = ['leave_id', 'user_id', 'description', 'status'];
 
     public function user()
     {

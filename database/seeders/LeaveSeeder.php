@@ -38,7 +38,7 @@ class LeaveSeeder extends Seeder
 
                 $totaDays = $startDate->diffInDays($endDate) + 1;
 
-                $filename = Str::random(50) . uniqid() . date('dmYHis') . '.pdf';
+                $filename = $faker->uuid() . '.pdf';
 
                 $file = UploadedFile::fake()->create($filename);
 

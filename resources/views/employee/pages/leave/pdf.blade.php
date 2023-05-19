@@ -35,6 +35,9 @@
     </style>
 </head>
 <body>
+@php
+    $leave = @$leave ?? null;
+@endphp
 <div style="margin-bottom: 40px;">
     PERATURAN BADAN KEPEGAWAIAN NEGARA <br>
     REPUBLIK INDONESIA <br>
@@ -56,13 +59,13 @@
     <tbody>
     <tr>
         <td class="bold" style="width: 25%;">Nama</td>
-        <td style="width: 25%;"></td>
+        <td style="width: 25%;">{{ $name }}</td>
         <td class="bold" style="width: 25%;">NIP</td>
-        <td style="width: 25%;"></td>
+        <td style="width: 25%;">{{ $nip }}</td>
     </tr>
     <tr>
         <td class="bold" style="width: 25%;">Unit Kerja</td>
-        <td style="width: 75%;" colspan="3"></td>
+        <td style="width: 75%;" colspan="3">Pegawai Swasta</td>
     </tr>
     </tbody>
 </table>
@@ -76,15 +79,31 @@
     <tbody>
     <tr>
         <td class="bold" style="width: 25%;">1. Cuti Tahunan (12 hari)</td>
-        <td style="width: 25%;" class="text-center"><img src="{{ public_path('assets/img/checkmark.png') }}" alt="" style="width: 20px; height: 20px;"></td>
+        <td style="width: 25%;" class="text-center">
+            <x-statement.conditional-if :conditional="$leave_type == \App\Models\Leave::LEAVE_TYPE_ANNUAL_LEAVE">
+                <x-icon.img.checkmark></x-icon.img.checkmark>
+            </x-statement.conditional-if>
+        </td>
         <td class="bold" style="width: 25%;">3. Cuti Melahirkan (3 bulan)</td>
-        <td style="width: 25%;" class="text-center"></td>
+        <td style="width: 25%;" class="text-center">
+            <x-statement.conditional-if :conditional="$leave_type == \App\Models\Leave::LEAVE_TYPE_MATERNITY_LEAVE">
+                <x-icon.img.checkmark></x-icon.img.checkmark>
+            </x-statement.conditional-if>
+        </td>
     </tr>
     <tr>
         <td class="bold" style="width: 25%;">2. Cuti Sakit</td>
-        <td style="width: 25%;" class="text-center"></td>
+        <td style="width: 25%;" class="text-center">
+            <x-statement.conditional-if :conditional="$leave_type == \App\Models\Leave::LEAVE_TYPE_SICK_LEAVE">
+                <x-icon.img.checkmark></x-icon.img.checkmark>
+            </x-statement.conditional-if>
+        </td>
         <td class="bold" style="width: 25%;">4. Cuti Besar (3 bulan)</td>
-        <td style="width: 25%;" class="text-center"></td>
+        <td style="width: 25%;" class="text-center">
+            <x-statement.conditional-if :conditional="$leave_type == \App\Models\Leave::LEAVE_TYPE_BIG_LEAVE">
+                <x-icon.img.checkmark></x-icon.img.checkmark>
+            </x-statement.conditional-if>
+        </td>
     </tr>
     </tbody>
 </table>
@@ -97,7 +116,7 @@
     </thead>
     <tbody>
     <tr>
-        <td style="height: 200px;"></td>
+        <td style="">{{ $reason }}</td>
     </tr>
     </tbody>
 </table>
@@ -111,9 +130,9 @@
     <tbody>
     <tr>
         <td class="bold" style="width: 25%;">Selama</td>
-        <td style="width: 25%;">30 hari</td>
+        <td style="width: 25%;">{{ $total_day }} hari</td>
         <td class="bold" style="width: 25%;">Mulai tanggal</td>
-        <td style="width: 25%;">1 Januari 2023 s/d 5 Januari 2023</td>
+        <td style="width: 25%;">{{ \Carbon\Carbon::parse($start_date)->format('d F Y') }} s/d {{ \Carbon\Carbon::parse($end_date)->format('d F Y') }}</td>
     </tr>
     </tbody>
 </table>
@@ -128,11 +147,31 @@
         <td class="bold" style="width: 25%;">Tidak Disetujui</td>
     </tr>
     <tr>
-        <td style="width: 25%; height: 50px;" class="text-center"></td>
-        <td style="width: 25%; height: 50px;" class="text-center"></td>
+        <td style="width: 25%; height: 50px;" class="text-center">
+            @if (@$leave)
+                <x-statement.conditional-if :conditional="$leave->isApprovedByHeadOfField()">
+                    <x-icon.img.checkmark></x-icon.img.checkmark>
+                </x-statement.conditional-if>
+            @endif
+        </td>
+        <td style="width: 25%; height: 50px;" class="text-center">
+            @if (@$leave)
+                <x-statement.conditional-if :conditional="$leave->isRejectedByHeadOfField()">
+                    <x-icon.img.checkmark></x-icon.img.checkmark>
+                </x-statement.conditional-if>
+            @endif
+        </td>
     </tr>
     <tr>
-        <td style="border-left-style: hidden; border-bottom-style: hidden;"></td>
+        @php
+            $description = optional($leave)->getLeaveApprovedMessage(\App\Models\User::ROLE_HEAD_OF_FIELD);
+        @endphp
+        <td @if (!$description) style="border-left-style: hidden; border-bottom-style: hidden;" @endif>
+            @if($description)
+                Ket: <br>
+                {{ $description }}
+            @endif
+        </td>
         <td style="width: 25%; height: 50px;" class="text-center">
             <span style="text-align: left; display: block;">NIP: 999xxx</span>
             <img src="{{ public_path('assets/img/ttd-kepegawaian.png') }}" alt="" style="width: 150px; height: 150px;">
@@ -154,11 +193,31 @@
         <td class="bold" style="width: 25%;">Tidak Disetujui</td>
     </tr>
     <tr>
-        <td style="width: 25%; height: 50px;" class="text-center"></td>
-        <td style="width: 25%; height: 50px;" class="text-center"></td>
+        <td style="width: 25%; height: 50px;" class="text-center">
+            @if (@$leave)
+                <x-statement.conditional-if :conditional="$leave->isApprovedByHeadOfDepartment()">
+                    <x-icon.img.checkmark></x-icon.img.checkmark>
+                </x-statement.conditional-if>
+            @endif
+        </td>
+        <td style="width: 25%; height: 50px;" class="text-center">
+            @if (@$leave)
+                <x-statement.conditional-if :conditional="$leave->isRejectedByHeadOfDepartment()">
+                    <x-icon.img.checkmark></x-icon.img.checkmark>
+                </x-statement.conditional-if>
+            @endif
+        </td>
     </tr>
     <tr>
-        <td style="border-left-style: hidden; border-bottom-style: hidden;"></td>
+        @php
+            $description = optional($leave)->getLeaveApprovedMessage(\App\Models\User::ROLE_HEAD_OF_DEPARTMENT);
+        @endphp
+        <td @if (!$description) style="border-left-style: hidden; border-bottom-style: hidden;" @endif>
+            @if($description)
+                Ket: <br>
+                {{ $description }}
+            @endif
+        </td>
         <td style="width: 25%; height: 50px;" class="text-center">
             <span style="text-align: left; display: block;">NIP: 999xxx</span>
             <img src="{{ public_path('assets/img/ttd-kepala-dinas.png') }}" alt="" style="width: 150px; height: 150px;">
