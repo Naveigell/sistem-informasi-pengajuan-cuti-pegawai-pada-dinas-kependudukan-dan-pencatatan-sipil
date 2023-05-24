@@ -18,6 +18,7 @@ class EmployeeRequest extends FormRequest
         $employee = $this->route('employee');
 
         $rules = [
+            "nip" => "required|string|max:50", // need advance validation, do it if you want
             "name" => "required|string|max:50",
             "username" => "required|unique:users|string|max:60",
             "email" => "required|unique:users|string|max:70",

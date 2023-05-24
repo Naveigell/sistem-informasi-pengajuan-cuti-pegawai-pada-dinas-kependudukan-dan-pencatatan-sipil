@@ -38,16 +38,8 @@
 @php
     $leave = @$leave ?? null;
 @endphp
-<div style="margin-bottom: 40px;">
-    PERATURAN BADAN KEPEGAWAIAN NEGARA <br>
-    REPUBLIK INDONESIA <br>
-    NOMOR 24 TAHUN 2017 <br>
-    TENTANG <br>
-    TATA CARA PEMBERIAN CUTI PEGAWAI NEGERI SIPIL <br>
-    ........................, ................... <br>
-    KEPADA <br>
-    Yth. .......................... <br>
-    di .........................
+<div>
+    <img src="{{ public_path('assets/img/header-kop.jpeg') }}" alt="" class="" style="width: 100%;">
 </div>
 <h3 class="text-center" style="text-transform: uppercase;">Formulir Permintaan dan Pemberian Cuti</h3>
 <table>

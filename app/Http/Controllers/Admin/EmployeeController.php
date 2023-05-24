@@ -19,7 +19,7 @@ class EmployeeController extends Controller
      */
     public function index()
     {
-        $employees = User::employee()->latest()->paginate(10);
+        $employees = User::with('biodata')->employee()->latest()->paginate(10);
 
         return view('admin.pages.employee.index', compact('employees'));
     }

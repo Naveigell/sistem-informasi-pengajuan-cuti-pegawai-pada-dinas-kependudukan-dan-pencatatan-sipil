@@ -28,7 +28,7 @@ class LeaveRequest extends FormRequest
         ];
 
         if (in_array($this->leave_type, [Leave::LEAVE_TYPE_ANNUAL_LEAVE, Leave::LEAVE_TYPE_SICK_LEAVE])) {
-            $rules["end_date"] = "required|date|after:start_date";
+            $rules["end_date"] = "required|date|after_or_equal:start_date";
         }
 
         return $rules;
@@ -36,18 +36,18 @@ class LeaveRequest extends FormRequest
 
     protected function prepareForValidation()
     {
-        $endDate = Carbon::parse($this->start_date);
-
         // if the leave type is not annual leave or sick leave, we add end date by 30 * 3 (3 months) programmatically
         // why we must reduce days by 1, it because we have beed add it by 1 in getLeaveTotalDays() function
         // we don't need the total day become 91 days
         if (!in_array($this->leave_type, [Leave::LEAVE_TYPE_ANNUAL_LEAVE, Leave::LEAVE_TYPE_SICK_LEAVE])) {
-            $endDate = $endDate->addDays((30 * 3) - 1);
-        }
+            $endDate = Carbon::parse($this->start_date);
 
-        $this->merge([
-            "end_date" => $endDate,
-        ]);
+            $endDate = $endDate->addDays((30 * 3) - 1);
+
+            $this->merge([
+                "end_date" => $endDate->format('Y-m-d'),
+            ]);
+        }
     }
 
     public function getLeaveTotalDays()

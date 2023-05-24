@@ -22,6 +22,15 @@
                         @enderror
                     </div>
                     <div class="form-group">
+                        <label>NIP</label>
+                        <input type="text" class="form-control @error('nip') is-invalid @enderror" name="nip" value="{{ old('nip', @$employee ? optional($employee->biodata)->nip : '') }}">
+                        @error('nip')
+                        <div class="invalid-feedback">
+                            {{ $message }}
+                        </div>
+                        @enderror
+                    </div>
+                    <div class="form-group">
                         <label>Username</label>
                         <input type="text" class="form-control @error('username') is-invalid @enderror" name="username" value="{{ old('username', @$employee ? $employee->username : '') }}">
                         @error('username')
