@@ -25,9 +25,9 @@
                             @enderror
                         </div>
                         <div class="form-group">
-                            <label>Jabatan</label>
-                            <input disabled type="text" class="form-control @error('role') is-invalid @enderror" name="role" value="{{ old('role', @$user ? $user->role_translated : '') }}">
-                            @error('role')
+                            <label>Golongan</label>
+                            <input disabled type="text" class="form-control @error('group') is-invalid @enderror" name="group" value="{{ old('group', @$user ? $groups->get($user->group) : '') }}">
+                            @error('group')
                             <div class="invalid-feedback">
                                 {{ $message }}
                             </div>

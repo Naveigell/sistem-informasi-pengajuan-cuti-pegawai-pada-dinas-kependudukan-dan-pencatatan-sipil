@@ -56,8 +56,8 @@
         <td style="width: 25%;">{{ $nip }}</td>
     </tr>
     <tr>
-        <td class="bold" style="width: 25%;">Unit Kerja</td>
-        <td style="width: 75%;" colspan="3">Pegawai Swasta</td>
+        <td class="bold" style="width: 25%;">Golongan</td>
+        <td style="width: 75%;" colspan="3">{{ $group }}</td>
     </tr>
     </tbody>
 </table>

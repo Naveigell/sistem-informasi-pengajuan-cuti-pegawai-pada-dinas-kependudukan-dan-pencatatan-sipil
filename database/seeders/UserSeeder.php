@@ -22,6 +22,9 @@ class UserSeeder extends Seeder
         $users = [];
 
         $hashedPassword = Hash::make(123456);
+        $groups = collect(User::GROUPS)->map(function ($group) {
+            return collect($group)->keys();
+        })->flatten();
 
         User::create([
             "name" => "Admin Test",
@@ -36,6 +39,7 @@ class UserSeeder extends Seeder
             "email" => "employee@gmail.com",
             "password" => 123456,
             "role" => User::ROLE_EMPLOYEE,
+            "group" => $groups->random(),
             "username" => "employee",
         ]);
 
@@ -70,6 +74,7 @@ class UserSeeder extends Seeder
                 "name" => $faker->name,
                 "email" => $faker->unique()->email,
                 "password" => $hashedPassword,
+                "group" => $role == User::ROLE_EMPLOYEE ? $groups->random() : null,
                 "role" => $role,
                 "username" => $faker->unique()->userName,
                 "created_at" => now()->toDateTimeString(),

@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Employee;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Employee\BiodataRequest;
 use App\Http\Requests\Employee\PasswordRequest;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\DB;
@@ -30,7 +31,13 @@ class BiodataController extends Controller
     {
         $user = auth()->user()->load('biodata');
 
-        return view('employee.pages.biodata.form', compact('user'));
+        $groups = collect(User::GROUPS)->map(function ($group) {
+            return collect($group)->keys();
+        })->flatten()->combine(collect(User::GROUPS)->map(function ($group) {
+            return collect($group)->values();
+        })->flatten());
+
+        return view('employee.pages.biodata.form', compact('user', 'groups'));
     }
 
     /**

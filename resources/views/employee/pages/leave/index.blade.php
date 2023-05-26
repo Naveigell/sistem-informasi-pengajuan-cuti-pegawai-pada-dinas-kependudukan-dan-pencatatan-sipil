@@ -51,7 +51,7 @@
                                 <td>
                                     <x-iterate :pagination="$leaves" :loop="$loop"></x-iterate>
                                 </td>
-                                <td><a href="{{ asset('storage/employees/leaves/' . $leave->filename) }}" class="">Download</a></td>
+                                <td><a href="{{ asset('storage/employees/leaves/' . $leave->filename) }}" class="" target="_blank">Download</a></td>
                                 <td>{{ $leave->start_date->format('d F Y') }}</td>
                                 <td>{{ $leave->end_date->format('d F Y') }}</td>
                                 <td>{{ $leave->total_day }}</td>

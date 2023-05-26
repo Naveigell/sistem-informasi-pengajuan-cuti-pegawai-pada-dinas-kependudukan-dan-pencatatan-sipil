@@ -31,6 +31,37 @@
                         @enderror
                     </div>
                     <div class="form-group">
+                        <label>Jabatan</label>
+                        <select name="role" id="" class="form-control @error('role') is-invalid @enderror">
+                            <x-nothing-selected></x-nothing-selected>
+                            @foreach([\App\Models\User::ROLE_EMPLOYEE => \App\Models\User::ROLE_EMPLOYEE] as $key => $role)
+                                <option @if (old('role', @$employee ? $employee->role : '') == $key) selected @endif value="{{ $key }}">{{ \App\Models\User::getRoleTranslated()[$role] }}</option>
+                            @endforeach
+                        </select>
+                        @error('role')
+                        <div class="invalid-feedback">
+                            {{ $message }}
+                        </div>
+                        @enderror
+                    </div>
+                    <div class="form-group">
+                        <label>Golongan</label>
+                        <select name="group" id="" class="form-control @error('group') is-invalid @enderror">
+                            <x-nothing-selected></x-nothing-selected>
+                            @foreach(\App\Models\User::GROUPS as $key => $groups)
+                                <optgroup label="{{ \App\Models\User::GROUP_HEADS[$key] }}">{{ \App\Models\User::GROUP_HEADS[$key] }}</optgroup>
+                                @foreach($groups as $g => $group)
+                                    <option @if (old('group', @$employee ? $employee->group : '') == $g) selected @endif value="{{ $g }}">{{ $group }}</option>
+                                @endforeach
+                            @endforeach
+                        </select>
+                        @error('group')
+                        <div class="invalid-feedback">
+                            {{ $message }}
+                        </div>
+                        @enderror
+                    </div>
+                    <div class="form-group">
                         <label>Username</label>
                         <input type="text" class="form-control @error('username') is-invalid @enderror" name="username" value="{{ old('username', @$employee ? $employee->username : '') }}">
                         @error('username')

@@ -24,6 +24,7 @@ class User extends Authenticatable
         'username',
         'email',
         'password',
+        'group',
         'role',
     ];
 
@@ -31,6 +32,40 @@ class User extends Authenticatable
     const ROLE_HEAD_OF_FIELD      = 'head_of_field';
     const ROLE_HEAD_OF_DEPARTMENT = 'head_of_department';
     const ROLE_EMPLOYEE           = 'employee';
+
+    const GROUPS = [
+        "I" => [
+            "I-A" => "Juru Muda",
+            "I-B" => "Juru Muda Tingkat 1",
+            "I-C" => "Juru",
+            "I-D" => "Juru Tingkat 1",
+        ],
+        "II" => [
+            "II-A" => "Pengatur Muda",
+            "II-B" => "Pengatur Muda Tingkat 1",
+            "II-C" => "Pengatur",
+            "II-D" => "Pengatur Tingkat 1",
+        ],
+        "III" => [
+            "III-A" => "Penata Muda",
+            "III-B" => "Penata Muda Tingkat 1",
+            "III-C" => "Penata",
+            "III-D" => "Penata Tingkat 1",
+        ],
+        "IV" => [
+            "IV-A" => "Pembina Muda",
+            "IV-B" => "Pembina Muda Tingkat 1",
+            "IV-C" => "Pembina",
+            "IV-D" => "Pembina Tingkat 1",
+        ],
+    ];
+
+    const GROUP_HEADS = [
+        "I" => "Juru",
+        "II" => "Pengatur",
+        "III" => "Penata",
+        "IV" => "Pembina"
+    ];
 
     /**
      * The attributes that should be hidden for serialization.
@@ -63,12 +98,17 @@ class User extends Authenticatable
 
     public function getRoleTranslatedAttribute()
     {
+        return self::getRoleTranslated()[$this->role];
+    }
+
+    public static function getRoleTranslated()
+    {
         return [
             self::ROLE_ADMIN => "Admin",
             self::ROLE_HEAD_OF_FIELD => "Kepala Bidang",
             self::ROLE_HEAD_OF_DEPARTMENT => "Kepala Dinas",
             self::ROLE_EMPLOYEE => "Pegawai",
-        ][$this->role];
+        ];
     }
 
     public function setPasswordAttribute($value)

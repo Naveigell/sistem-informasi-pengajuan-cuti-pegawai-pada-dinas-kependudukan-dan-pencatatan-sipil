@@ -24,6 +24,7 @@
                             <th class="col-1">No</th>
                             <th class="col-2">NIP</th>
                             <th class="col-2">Nama Pegawai</th>
+                            <th class="col-2">Golongan</th>
                             <th class="col-2">Username</th>
                             <th class="col-2">Email</th>
                             <th class="col-2">Aksi</th>
@@ -37,6 +38,7 @@
                                 </td>
                                 <td>{{ $employee->biodata->nip }}</td>
                                 <td>{{ $employee->name }}</td>
+                                <td>{{ $employee->group }}</td>
                                 <td>{{ $employee->username }}</td>
                                 <td>{{ $employee->email }}</td>
                                 <td>

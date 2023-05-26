@@ -4,6 +4,7 @@ namespace App\Http\Requests\Admin;
 
 use App\Models\User;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Arr;
 
 class EmployeeRequest extends FormRequest
 {
@@ -17,8 +18,14 @@ class EmployeeRequest extends FormRequest
         /* @var User $employee */
         $employee = $this->route('employee');
 
+        $groups = collect(User::GROUPS)->map(function ($group) {
+            return collect($group)->keys();
+        })->flatten();
+
         $rules = [
             "nip" => "required|string|max:50", // need advance validation, do it if you want
+            "group" => "required|string|in:" . $groups->join(','),
+            "role" => "required|string|in:" . join(',', [User::ROLE_EMPLOYEE]),
             "name" => "required|string|max:50",
             "username" => "required|unique:users|string|max:60",
             "email" => "required|unique:users|string|max:70",

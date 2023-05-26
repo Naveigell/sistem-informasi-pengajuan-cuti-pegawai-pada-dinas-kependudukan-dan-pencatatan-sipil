@@ -76,6 +76,25 @@ class Leave extends Model
     public function generateLeavePdf($data)
     {
         $filename = Uuid::uuid() . '.pdf';
+        $groups = collect(User::GROUPS)->map(function ($group) {
+            return collect($group)->keys();
+        });
+
+        $data['groups'] = $groups;
+        $data['user'] = auth()->user(); // we assume the user is not employee, for default
+
+        // so if the user is not employee, that's mean we must load the user from eager load
+        if (!in_array(auth()->user()->role, [User::ROLE_EMPLOYEE])) {
+            $data['user'] = $this->user;
+        }
+
+        $groups = collect(User::GROUPS)->map(function ($group) {
+            return collect($group)->keys();
+        })->flatten()->combine(collect(User::GROUPS)->map(function ($group) {
+            return collect($group)->values();
+        })->flatten());
+
+        $data['group'] = $groups->get($data['user']->group);
 
         $pdf = Pdf::loadView('employee.pages.leave.pdf', $data);
         $output = $pdf->download()->getOriginalContent();
