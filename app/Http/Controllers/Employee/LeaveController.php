@@ -79,24 +79,36 @@ class LeaveController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @param Leave $leave
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
      */
-    public function edit($id)
+    public function edit(Leave $leave)
     {
-        //
+        return view('employee.pages.leave.form', compact('leave'));
     }
 
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @param LeaveRequest $request
+     * @param Leave $leave
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
      */
-    public function update(Request $request, $id)
+    public function update(LeaveRequest $request, Leave $leave)
     {
-        //
+        $leave->generateLeavePdf(array_merge($leave->attributesToArray(), $request->validated(), [
+            "name" => $leave->user->name,
+            "nip"  => $leave->user->biodata->nip,
+            "leave" => $leave,
+            "total_day" => $request->getLeaveTotalDays(),
+        ]));
+        $leave->fill(array_merge($request->validated(), $request->only('end_date'), [
+            "leave_type" => $request->leave_type,
+            "total_day" => $request->getLeaveTotalDays(),
+        ]));
+        $leave->save();
+
+        return redirect(route('employee.leaves.index'))->with('success', 'Berhasil merevisi cuti');
     }
 
     /**

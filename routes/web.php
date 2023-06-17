@@ -31,7 +31,7 @@ Route::prefix('admin')->middleware('redirect.to.login.if.not.authenticated')->na
 Route::prefix('employee')->middleware('redirect.to.login.if.not.authenticated')->name('employee.')->group(function () {
     Route::resource('dashboard', \App\Http\Controllers\Employee\DashboardController::class);
     Route::resource('leaves', \App\Http\Controllers\Employee\LeaveController::class)
-        ->only('store', 'index', 'create')
+        ->except('destroy', 'show')
         ->parameter('leaves', 'leave');
     Route::patch('biodatas/password', [\App\Http\Controllers\Employee\BiodataController::class, 'password'])->name('biodatas.password');
     Route::resource('biodatas', \App\Http\Controllers\Employee\BiodataController::class);

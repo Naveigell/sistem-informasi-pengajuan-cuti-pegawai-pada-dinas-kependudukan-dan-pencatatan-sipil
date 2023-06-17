@@ -5,8 +5,9 @@
 @section('content-body')
     <div class="col-12 col-md-12 col-lg-12 no-padding-margin">
         <div class="card">
-            <form action="{{ route('employee.leaves.store') }}" method="post" enctype="multipart/form-data">
+            <form action="{{ @$leave ? route('employee.leaves.update', $leave) : route('employee.leaves.store') }}" method="post" enctype="multipart/form-data">
                 @csrf
+                @method(@$leave ? 'PUT' : 'POST')
                 <div class="card-header">
                     <h4>Form Pengajuan Cuti</h4>
                 </div>
@@ -16,7 +17,7 @@
                         <select name="leave_type" id="leave-type" class="form-control @error('leave_type') is-invalid @enderror">
                             <x-nothing-selected></x-nothing-selected>
                             @foreach(array_keys(\App\Models\Leave::getAllLeaveTypes()) as $leaveType)
-                                <option @if(old('leave_type') == $leaveType) selected @endif @if(in_array($leaveType, [\App\Models\Leave::LEAVE_TYPE_ANNUAL_LEAVE, \App\Models\Leave::LEAVE_TYPE_SICK_LEAVE])) data-need-date="true" @endif value="{{ $leaveType }}">{{ \App\Models\Leave::getLeaveType($leaveType) }} ({{ \App\Models\Leave::getLeaveAmountText($leaveType) }})</option>
+                                <option @if(old('leave_type', @$leave ? $leave->leave_type : '') == $leaveType) selected @endif @if(in_array($leaveType, [\App\Models\Leave::LEAVE_TYPE_ANNUAL_LEAVE, \App\Models\Leave::LEAVE_TYPE_SICK_LEAVE])) data-need-date="true" @endif value="{{ $leaveType }}">{{ \App\Models\Leave::getLeaveType($leaveType) }} ({{ \App\Models\Leave::getLeaveAmountText($leaveType) }})</option>
                             @endforeach
                         </select>
                         @error('leave_type')
@@ -27,7 +28,7 @@
                     </div>
                     <div class="form-group">
                         <label>Tanggal Cuti</label>
-                        <input type="date" class="form-control @error('start_date') is-invalid @enderror" name="start_date" value="{{ old('start_date') }}">
+                        <input type="date" class="form-control @error('start_date') is-invalid @enderror" name="start_date" value="{{ old('start_date', @$leave ? $leave->start_date->format('Y-m-d') : '') }}">
                         @error('start_date')
                         <div class="invalid-feedback">
                             {{ $message }}
@@ -37,7 +38,7 @@
                     <div id="container-need-date">
                         <div class="form-group">
                             <label>Sampai Tanggal</label>
-                            <input type="date" class="form-control @error('end_date') is-invalid @enderror" name="end_date" value="{{ old('end_date') }}">
+                            <input type="date" class="form-control @error('end_date') is-invalid @enderror" name="end_date" value="{{ old('end_date', @$leave ? $leave->end_date->format('Y-m-d') : '') }}">
                             @error('end_date')
                             <div class="invalid-feedback">
                                 {{ $message }}
@@ -47,7 +48,7 @@
                     </div>
                     <div class="form-group">
                         <label>Alasan Cuti</label>
-                        <textarea name="reason" id="reason" cols="30" rows="10" class="form-control @error('reason') is-invalid @enderror" style="min-height: 300px; resize: none;">{{ old('reason') }}</textarea>
+                        <textarea name="reason" id="reason" cols="30" rows="10" class="form-control @error('reason') is-invalid @enderror" style="min-height: 300px; resize: none;">{{ old('reason', @$leave ? $leave->reason : '') }}</textarea>
                         @error('reason')
                         <div class="invalid-feedback">
                             {{ $message }}
@@ -74,7 +75,7 @@
             }
         })
     </script>
-    @if(in_array(old('leave_type'), [\App\Models\Leave::LEAVE_TYPE_ANNUAL_LEAVE, \App\Models\Leave::LEAVE_TYPE_SICK_LEAVE]))
+    @if(in_array(old('leave_type', @$leave ? $leave->leave_type : ''), [\App\Models\Leave::LEAVE_TYPE_ANNUAL_LEAVE, \App\Models\Leave::LEAVE_TYPE_SICK_LEAVE]))
         <script>
             $('#container-need-date').show();
         </script>

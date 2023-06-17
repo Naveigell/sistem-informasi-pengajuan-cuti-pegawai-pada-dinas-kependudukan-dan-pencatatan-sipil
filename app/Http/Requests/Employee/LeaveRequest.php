@@ -19,11 +19,12 @@ class LeaveRequest extends FormRequest
      */
     public function rules()
     {
-        $moreThan4Days = now()->addDays(4)->format('d-m-Y');
+//        $moreThan4Days = now()->addDays(4)->format('d-m-Y');
 
         $rules = [
             "leave_type" => "required|string|in:" . join(',', array_keys(Leave::getAllLeaveTypes())),
-            "start_date" => "required|date|after:{$moreThan4Days}",
+            "start_date" => "required|date",
+//            "start_date" => "required|date|after:{$moreThan4Days}",
             "reason" => "required|string|max:15000",
         ];
 

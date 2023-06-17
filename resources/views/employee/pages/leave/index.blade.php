@@ -43,6 +43,7 @@
                             <th class="col-3">Sampai Tanggal</th>
                             <th class="col-2">Total Hari</th>
                             <th class="col-3">Status</th>
+                            <th class="col-1">Aksi</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -57,6 +58,9 @@
                                 <td>{{ $leave->total_day }}</td>
                                 <td>
                                     <span class="badge {{ $leave->status_class_formatted }}">{{ $leave->status_formatted }}</span>
+                                </td>
+                                <td>
+                                    <a href="{{ route('employee.leaves.edit', $leave) }}" class="btn btn-warning"><i class="fa fa-eye"></i></a>
                                 </td>
                             </tr>
                         @empty
