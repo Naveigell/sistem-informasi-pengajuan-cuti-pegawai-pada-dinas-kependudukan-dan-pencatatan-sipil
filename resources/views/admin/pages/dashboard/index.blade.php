@@ -65,18 +65,27 @@
             </div>
         </div>
     </div>
-    <div class="row">
-        <div class="col-lg-12 col-md-12 col-12 col-sm-12">
-            <div class="card">
-                <div class="card-header">
-                    <h4>Statistik</h4>
-                </div>
-                <div class="card-body"><div class="chartjs-size-monitor" style="position: absolute; inset: 0px; overflow: hidden; pointer-events: none; visibility: hidden; z-index: -1;"><div class="chartjs-size-monitor-expand" style="position:absolute;left:0;top:0;right:0;bottom:0;overflow:hidden;pointer-events:none;visibility:hidden;z-index:-1;"><div style="position:absolute;width:1000000px;height:1000000px;left:0;top:0"></div></div><div class="chartjs-size-monitor-shrink" style="position:absolute;left:0;top:0;right:0;bottom:0;overflow:hidden;pointer-events:none;visibility:hidden;z-index:-1;"><div style="position:absolute;width:200%;height:200%;left:0; top:0"></div></div></div>
-                    <canvas id="myChart" height="576" width="950" style="display: block; width: 950px; height: 576px;" class="chartjs-render-monitor"></canvas>
+    @if (auth()->user()->isLeader() || (!auth()->user()->isAdmin() && $leaveNotifications->isNotEmpty()))
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header"><h4>Pemberitahuan</h4></div>
+                    <div class="card-body">
+                        @foreach($leaveNotifications as $notification)
+                            <div class="alert alert-info alert-dismissible show fade">
+                                <div class="alert-body">
+                                    <button class="close" data-dismiss="alert">
+                                        <span>×</span>
+                                    </button>
+                                    {!! $notification->description !!}
+                                </div>
+                            </div>
+                        @endforeach
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
+    @endif
 @endsection
 
 @push('stack-script')

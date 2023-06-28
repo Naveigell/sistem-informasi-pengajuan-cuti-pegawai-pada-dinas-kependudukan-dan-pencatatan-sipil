@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Leave;
+use App\Models\LeaveNotification;
 use App\Models\User;
 use Illuminate\Http\Request;
 
@@ -22,7 +23,14 @@ class DashboardController extends Controller
         $totalLeavesRejected = Leave::where('status', Leave::STATUS_REJECTED)->count();
         $totalEmployee = User::employee()->count();
 
-        return view('admin.pages.dashboard.index', compact('totalLeavesPending', 'totalLeavesApproved', 'totalLeavesRejected', 'totalEmployee'));
+        // don't take the notification if role is admin
+        $leaveNotifications =
+            auth()->user()->isAdmin()
+                ? collect() : LeaveNotification::whereHas('leave', function ($query) {
+                                $query->where('status', Leave::STATUS_IN_PROGRESS);
+                            })->paginate(10);
+
+        return view('admin.pages.dashboard.index', compact('totalLeavesPending', 'totalLeavesApproved', 'totalLeavesRejected', 'totalEmployee', 'leaveNotifications'));
     }
 
     /**

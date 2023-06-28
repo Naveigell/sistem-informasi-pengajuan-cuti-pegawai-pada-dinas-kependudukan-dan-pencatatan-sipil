@@ -289,6 +289,11 @@ class Leave extends Model
         return $this->belongsTo(User::class);
     }
 
+    public function leaveNotifications()
+    {
+        return $this->hasMany(LeaveNotification::class)->latest();
+    }
+
     private function loadLeaveApproveds()
     {
         if (!$this->relationLoaded('leaveApproveds')) {

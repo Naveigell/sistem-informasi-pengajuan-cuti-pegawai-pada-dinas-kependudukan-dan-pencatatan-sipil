@@ -7,6 +7,7 @@ use App\Http\Requests\Employee\LeaveRequest;
 use App\Models\Leave;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\DB;
 
 class LeaveController extends Controller
 {
@@ -48,19 +49,25 @@ class LeaveController extends Controller
      */
     public function store(LeaveRequest $request)
     {
-        $validated = array_merge(
-            $request->validated(), $request->only('end_date'), [
-                "user_id" => auth()->id(),
-                "status" => Leave::STATUS_IN_PROGRESS,
-                "total_day" => $request->getLeaveTotalDays(),
-                "name" => auth()->user()->name,
-                "nip"  => auth()->user()->biodata->nip,
-            ]
-        );
+        DB::transaction(function () use ($request) {
+            $validated = array_merge(
+                $request->validated(), $request->only('end_date'), [
+                    "user_id" => auth()->id(),
+                    "status" => Leave::STATUS_IN_PROGRESS,
+                    "total_day" => $request->getLeaveTotalDays(),
+                    "name" => auth()->user()->name,
+                    "nip"  => auth()->user()->biodata->nip,
+                ]
+            );
 
-        $leave = new Leave($validated);
-        $leave->generateLeavePdf($validated);
-        $leave->save();
+            $leave = new Leave($validated);
+            $leave->generateLeavePdf($validated);
+            $leave->save();
+
+            $leave->leaveNotifications()->create([
+                "description" => "Pegawai dengan nama <b>" . auth()->user()->name . "</b> mengajukan cuti",
+            ]);
+        });
 
         return redirect(route('employee.leaves.index'))->with('success', 'Berhasil mengajukan cuti');
     }
@@ -96,17 +103,23 @@ class LeaveController extends Controller
      */
     public function update(LeaveRequest $request, Leave $leave)
     {
-        $leave->generateLeavePdf(array_merge($leave->attributesToArray(), $request->validated(), [
-            "name" => $leave->user->name,
-            "nip"  => $leave->user->biodata->nip,
-            "leave" => $leave,
-            "total_day" => $request->getLeaveTotalDays(),
-        ]));
-        $leave->fill(array_merge($request->validated(), $request->only('end_date'), [
-            "leave_type" => $request->leave_type,
-            "total_day" => $request->getLeaveTotalDays(),
-        ]));
-        $leave->save();
+        DB::transaction(function () use ($request, $leave) {
+            $leave->generateLeavePdf(array_merge($leave->attributesToArray(), $request->validated(), [
+                "name" => $leave->user->name,
+                "nip"  => $leave->user->biodata->nip,
+                "leave" => $leave,
+                "total_day" => $request->getLeaveTotalDays(),
+            ]));
+            $leave->fill(array_merge($request->validated(), $request->only('end_date'), [
+                "leave_type" => $request->leave_type,
+                "total_day" => $request->getLeaveTotalDays(),
+            ]));
+            $leave->save();
+
+            $leave->leaveNotifications()->create([
+                "description" => "Pegawai dengan nama <b>" . auth()->user()->name . "</b> mengubah cuti",
+            ]);
+        });
 
         return redirect(route('employee.leaves.index'))->with('success', 'Berhasil merevisi cuti');
     }

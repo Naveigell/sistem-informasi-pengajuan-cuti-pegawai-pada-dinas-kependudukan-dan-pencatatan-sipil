@@ -30,7 +30,8 @@ class PendingLeaveController extends Controller
     {
         $amount = Leave::where('user_id', $leave->user_id)->where('status', Leave::STATUS_APPROVED)->sum('total_day');
 
-        if (Leave::isInMaxLeave($amount)) {
+        // we must check the max leave if the leave type is annual leave, another leave don't have max leave
+        if (Leave::isInMaxLeave($amount) && in_array($leave->leave_type, [Leave::LEAVE_TYPE_ANNUAL_LEAVE])) {
             return redirect(route('admin.leaves.request.pending.index'))->with('error', "Sisa cuti pegawai tersebut sudah habis");
         }
 
@@ -62,6 +63,12 @@ class PendingLeaveController extends Controller
                 "leave" => $leave,
             ]));
             $leave->save();
+
+            // delete the notificatioins if status is approved or rejected, this is because the notifications will be showed
+            // in the head.department and heard.field role in their dashboard
+            if (in_array($leave->status, [Leave::STATUS_APPROVED, Leave::STATUS_REJECTED])) {
+                $leave->leaveNotifications()->delete();
+            }
 
             Storage::delete("public/employees/leaves/{$currentLeaveFilename}");
         });
