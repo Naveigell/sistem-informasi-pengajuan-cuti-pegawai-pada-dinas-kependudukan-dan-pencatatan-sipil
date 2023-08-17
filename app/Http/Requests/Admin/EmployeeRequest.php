@@ -28,7 +28,7 @@ class EmployeeRequest extends FormRequest
             "role" => "required|string|in:" . join(',', [User::ROLE_EMPLOYEE]),
             "name" => "required|string|max:50",
             "username" => "required|unique:users|string|max:60",
-            "email" => "required|unique:users|string|max:70",
+            "email" => "required|email|unique:users|string|max:70",
             "phone" => "required|string|regex:/(08)[0-9]{5,17}/",
             "address" => "required|string|max:255",
         ];

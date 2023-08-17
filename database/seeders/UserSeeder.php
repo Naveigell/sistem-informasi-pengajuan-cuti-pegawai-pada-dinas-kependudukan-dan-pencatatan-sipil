@@ -35,8 +35,8 @@ class UserSeeder extends Seeder
         ]);
 
         User::create([
-            "name" => "Employee Test",
-            "email" => "employee@gmail.com",
+            "name" => "Karyawan Test",
+            "email" => "karyawan@gmail.com",
             "password" => 123456,
             "role" => User::ROLE_EMPLOYEE,
             "group" => $groups->random(),
@@ -44,19 +44,19 @@ class UserSeeder extends Seeder
         ]);
 
         User::create([
-            "name" => "Head Department Test",
-            "email" => "head.department@gmail.com",
+            "name" => "Kepala Dinas",
+            "email" => "kepala.dinas@gmail.com",
             "password" => 123456,
             "role" => User::ROLE_HEAD_OF_DEPARTMENT,
-            "username" => "head.department",
+            "username" => "kepala.dinas",
         ]);
 
         User::create([
-            "name" => "Head Field Test",
-            "email" => "head.field@gmail.com",
+            "name" => "Kepala Bidang",
+            "email" => "kepala.bidang@gmail.com",
             "password" => 123456,
             "role" => User::ROLE_HEAD_OF_FIELD,
-            "username" => "head.field",
+            "username" => "kepala.bidang",
         ]);
 
         foreach (range(1, 50) as $i) {
