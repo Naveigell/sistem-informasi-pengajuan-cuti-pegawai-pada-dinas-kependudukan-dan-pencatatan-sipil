@@ -13,7 +13,7 @@
             <li class="menu-header">Users</li>
             <li class="@if (request()->routeIs('admin.employees.*')) active @endif"><a class="nav-link" href="{{ route('admin.employees.index') }}"><i class="fas fa-users"></i> <span>Pegawai</span></a></li>
             @if(auth()->user()->isAdmin())
-                <li class="@if (request()->routeIs('admin.leaders.*')) active @endif"><a class="nav-link" href="{{ route('admin.leaders.index') }}"><i class="fas fa-user-shield"></i> <span>Kepala</span></a></li>
+                <li class="@if (request()->routeIs('admin.leaders.*')) active @endif"><a class="nav-link" href="{{ route('admin.leaders.index') }}"><i class="fas fa-user-shield"></i> <span>Pimpinan</span></a></li>
             @endif
             @if (auth()->user()->isLeader())
                 <li class="menu-header">Pengajuan Cuti</li>

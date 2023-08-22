@@ -1,6 +1,6 @@
 @extends('layouts.admin.admin')
 
-@section('content-title', 'Kepala')
+@section('content-title', 'Pimpinan')
 
 @section('content-body')
     <div class="col-12 col-md-12 col-lg-12 no-padding-margin">
@@ -9,7 +9,7 @@
                 @csrf
                 @method(@$leader ? 'PUT' : 'POST')
                 <div class="card-header">
-                    <h4>Form Kepala</h4>
+                    <h4>Form Pimpinan</h4>
                 </div>
                 <div class="card-body">
                     <div class="form-group">

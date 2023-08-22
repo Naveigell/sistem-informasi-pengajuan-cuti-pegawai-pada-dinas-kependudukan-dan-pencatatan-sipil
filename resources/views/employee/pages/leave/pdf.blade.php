@@ -132,7 +132,7 @@
 <table>
     <tbody>
     <tr>
-        <td colspan="2" class="bold" style="text-align: left;">V. Pertimbangan Kepala Bidang</td>
+        <td colspan="2" class="bold" style="text-align: left;">V. Pertimbangan Kepala Bidang Kepegawaian</td>
     </tr>
     <tr>
         <td class="bold" style="width: 25%;">Disetujui</td>

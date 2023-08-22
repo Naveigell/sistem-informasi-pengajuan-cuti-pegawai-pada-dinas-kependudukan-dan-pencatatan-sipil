@@ -1,6 +1,6 @@
 @extends('layouts.admin.admin')
 
-@section('content-title', 'Pending Cuti')
+@section('content-title', 'Semua Cuti')
 
 @section('content-body')
     @if ($message = session()->get('success'))

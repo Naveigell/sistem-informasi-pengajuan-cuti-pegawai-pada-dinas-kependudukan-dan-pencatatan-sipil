@@ -1,6 +1,6 @@
 @extends('layouts.admin.admin')
 
-@section('content-title', 'Kepala')
+@section('content-title', 'Pimpinan')
 
 @section('content-body')
     @if ($message = session()->get('success'))
@@ -20,7 +20,7 @@
                         <thead>
                         <tr>
                             <th class="col-1">No</th>
-                            <th class="col-2">Nama Kepala</th>
+                            <th class="col-2">Nama Pimpinan</th>
                             <th class="col-2">Username</th>
                             <th class="col-2">Email</th>
                             <th class="col-2">Jabatan</th>
