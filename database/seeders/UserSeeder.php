@@ -84,7 +84,11 @@ class UserSeeder extends Seeder
 
         User::insert($users);
 
-        $users = User::employee()->get();
+        $users = User::whereIn('role', [
+            User::ROLE_EMPLOYEE,
+            User::ROLE_HEAD_OF_FIELD,
+            User::ROLE_HEAD_OF_DEPARTMENT,
+        ])->get();
 
         $biodatas = [];
 

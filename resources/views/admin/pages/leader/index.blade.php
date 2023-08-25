@@ -11,7 +11,7 @@
             <div class="card-header">
                 <h4>Kepala</h4>
                 <div class="card-header-action">
-                    <a href="{{ route('admin.leaders.create') }}" class="btn btn-primary"><i class="fa fa-plus"></i> Tambah Kepala</a>
+                    <a href="{{ route('admin.leaders.create') }}" class="btn btn-primary"><i class="fa fa-plus"></i> Tambah Pimpinan</a>
                 </div>
             </div>
             <div class="card-body p-0">

@@ -157,6 +157,8 @@
     <tr>
         @php
             $description = optional($leave)->getLeaveApprovedMessage(\App\Models\User::ROLE_HEAD_OF_FIELD);
+            $nip = optional(optional(optional($leave)->getLeaveApproved(\App\Models\User::ROLE_HEAD_OF_FIELD)->user)->biodata)->nip;
+            $name = optional(optional($leave)->getLeaveApproved(\App\Models\User::ROLE_HEAD_OF_FIELD)->user)->name;
         @endphp
         <td @if (!$description) style="border-left-style: hidden; border-bottom-style: hidden;" @endif>
             @if($description)
@@ -164,10 +166,15 @@
                 {{ $description }}
             @endif
         </td>
-        <td style="width: 25%; height: 50px;" class="text-center">
-            <span style="text-align: left; display: block;">NIP: 999xxx</span>
-            <img src="{{ public_path('assets/img/ttd-kepegawaian.png') }}" alt="" style="width: 150px; height: 150px;">
-            <span style="display: block;">Test Test</span>
+        <td style="width: 25%; height: 50px; @if(!$nip && !$name) @if(!$description) border-left-style: hidden; @endif border-right-style: hidden; border-bottom-style: hidden; @endif" class="text-center">
+            @if($nip && $name)
+                <img src="{{ public_path('assets/img/ttd-kepegawaian.png') }}" alt="" style="width: 150px; height: 150px;">
+                <span style="display: block; margin-left: 40px; margin-right: 40px;">
+                    {{ $name }}
+                    <hr>
+                    {{ $nip }}
+                </span>
+            @endif
         </td>
     </tr>
     </tbody>
@@ -203,6 +210,8 @@
     <tr>
         @php
             $description = optional($leave)->getLeaveApprovedMessage(\App\Models\User::ROLE_HEAD_OF_DEPARTMENT);
+            $nip = optional(optional(optional($leave)->getLeaveApproved(\App\Models\User::ROLE_HEAD_OF_DEPARTMENT)->user)->biodata)->nip;
+            $name = optional(optional($leave)->getLeaveApproved(\App\Models\User::ROLE_HEAD_OF_DEPARTMENT)->user)->name;
         @endphp
         <td @if (!$description) style="border-left-style: hidden; border-bottom-style: hidden;" @endif>
             @if($description)
@@ -210,10 +219,15 @@
                 {{ $description }}
             @endif
         </td>
-        <td style="width: 25%; height: 50px;" class="text-center">
-            <span style="text-align: left; display: block;">NIP: 999xxx</span>
-            <img src="{{ public_path('assets/img/ttd-kepala-dinas.png') }}" alt="" style="width: 150px; height: 150px;">
-            <span style="display: block;">Test Test</span>
+        <td style="width: 25%; height: 50px; @if(!$nip && !$name) @if(!$description) border-left-style: hidden; @endif border-right-style: hidden; border-bottom-style: hidden; @endif" class="text-center">
+            @if($nip && $name)
+                <img src="{{ public_path('assets/img/ttd-kepala-dinas.png') }}" alt="" style="width: 150px; height: 150px;">
+                <span style="display: block; margin-left: 40px; margin-right: 40px;">
+                    {{ $name }}
+                    <hr>
+                    {{ $nip }}
+                </span>
+            @endif
         </td>
     </tr>
     </tbody>

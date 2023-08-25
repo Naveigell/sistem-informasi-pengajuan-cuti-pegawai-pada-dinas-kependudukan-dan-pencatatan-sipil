@@ -23,7 +23,7 @@
             </a>
             <div class="dropdown-menu dropdown-list dropdown-menu-right">
                 <div class="dropdown-header">
-                    Notifications
+                    Notifikasi
                 </div>
                 <div class="dropdown-list-content dropdown-list-icons dropdown-no-after">
                     @foreach($notifications as $notification)

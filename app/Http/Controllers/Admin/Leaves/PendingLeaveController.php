@@ -54,6 +54,8 @@ class PendingLeaveController extends Controller
 
             $currentLeaveFilename = $leave->filename;
 
+//            dd($leave->getLeaveApproved(\App\Models\User::ROLE_HEAD_OF_DEPARTMENT)->user->biodata);
+
             // remove relations because we will reload it again when generate pdf
             $leave = $leave->withoutRelations();
             $leave->load('user.biodata');

@@ -243,11 +243,22 @@ class Leave extends Model
      */
     public function getLeaveApprovedMessage($role)
     {
+        return $this->getLeaveApproved($role)->description;
+    }
+
+    /**
+     * Get first leave approved user by role
+     *
+     * @param $role
+     * @return \Illuminate\Support\Optional|mixed
+     */
+    public function getLeaveApproved($role)
+    {
         $this->loadLeaveApproveds();
 
         return optional($this->leaveApproveds->filter(function ($leaveApproved) use ($role) {
             return in_array(optional($leaveApproved->user)->role, [$role]);
-        })->first())->description;
+        })->first());
     }
 
     public function isApproved()
