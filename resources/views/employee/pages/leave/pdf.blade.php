@@ -157,8 +157,8 @@
     <tr>
         @php
             $description = optional($leave)->getLeaveApprovedMessage(\App\Models\User::ROLE_HEAD_OF_FIELD);
-            $nip = optional(optional(optional($leave)->getLeaveApproved(\App\Models\User::ROLE_HEAD_OF_FIELD)->user)->biodata)->nip;
-            $name = optional(optional($leave)->getLeaveApproved(\App\Models\User::ROLE_HEAD_OF_FIELD)->user)->name;
+            $nip = optional(optional(optional(optional($leave)->getLeaveApproved(\App\Models\User::ROLE_HEAD_OF_FIELD))->user)->biodata)->nip;
+            $name = optional(optional(optional($leave)->getLeaveApproved(\App\Models\User::ROLE_HEAD_OF_FIELD))->user)->name;
         @endphp
         <td @if (!$description) style="border-left-style: hidden; border-bottom-style: hidden;" @endif>
             @if($description)
@@ -210,8 +210,8 @@
     <tr>
         @php
             $description = optional($leave)->getLeaveApprovedMessage(\App\Models\User::ROLE_HEAD_OF_DEPARTMENT);
-            $nip = optional(optional(optional($leave)->getLeaveApproved(\App\Models\User::ROLE_HEAD_OF_DEPARTMENT)->user)->biodata)->nip;
-            $name = optional(optional($leave)->getLeaveApproved(\App\Models\User::ROLE_HEAD_OF_DEPARTMENT)->user)->name;
+            $nip = optional(optional(optional(optional($leave)->getLeaveApproved(\App\Models\User::ROLE_HEAD_OF_DEPARTMENT))->user)->biodata)->nip;
+            $name = optional(optional(optional($leave)->getLeaveApproved(\App\Models\User::ROLE_HEAD_OF_DEPARTMENT))->user)->name;
         @endphp
         <td @if (!$description) style="border-left-style: hidden; border-bottom-style: hidden;" @endif>
             @if($description)
