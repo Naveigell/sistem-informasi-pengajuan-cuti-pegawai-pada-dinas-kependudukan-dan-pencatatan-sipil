@@ -22,6 +22,15 @@
                         @enderror
                     </div>
                     <div class="form-group">
+                        <label>NIP</label>
+                        <input type="text" class="form-control @error('nip') is-invalid @enderror" name="nip" value="{{ old('nip', @$leader ? optional($leader->biodata)->nip : '') }}">
+                        @error('nip')
+                        <div class="invalid-feedback">
+                            {{ $message }}
+                        </div>
+                        @enderror
+                    </div>
+                    <div class="form-group">
                         <label>Jabatan</label>
                         <select name="role" id="" class="form-control @error('role') is-invalid @enderror">
                             <x-nothing-selected></x-nothing-selected>
@@ -51,6 +60,24 @@
                         <label>Email</label>
                         <input type="text" class="form-control @error('email') is-invalid @enderror" name="email" value="{{ old('email', @$leader ? $leader->email : '') }}">
                         @error('email')
+                        <div class="invalid-feedback">
+                            {{ $message }}
+                        </div>
+                        @enderror
+                    </div>
+                    <div class="form-group">
+                        <label>No Telp</label>
+                        <input type="text" class="form-control @error('phone') is-invalid @enderror" name="phone" value="{{ old('phone', @$leader ? $leader->biodata->phone : '') }}">
+                        @error('phone')
+                        <div class="invalid-feedback">
+                            {{ $message }}
+                        </div>
+                        @enderror
+                    </div>
+                    <div class="form-group">
+                        <label>Alamat</label>
+                        <textarea name="address" id="" cols="30" rows="10" style="min-height: 200px; resize: none;" class="form-control @error('address') is-invalid @enderror">{{ old('address', @$leader ? $leader->biodata->address : '') }}</textarea>
+                        @error('address')
                         <div class="invalid-feedback">
                             {{ $message }}
                         </div>

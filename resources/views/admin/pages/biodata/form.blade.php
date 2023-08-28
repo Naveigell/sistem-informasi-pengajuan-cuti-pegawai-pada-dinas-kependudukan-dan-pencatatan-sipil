@@ -30,6 +30,15 @@
                                                 @enderror
                                             </div>
                                             <div class="form-group">
+                                                <label>NIP</label>
+                                                <input type="text" disabled class="form-control @error('nip') is-invalid @enderror" name="nip" value="{{ old('nip', auth()->user()->biodata->nip) }}">
+                                                @error('nip')
+                                                <div class="invalid-feedback">
+                                                    {{ $message }}
+                                                </div>
+                                                @enderror
+                                            </div>
+                                            <div class="form-group">
                                                 <label for="username">Username</label>
                                                 <input type="text" id="username" value="{{ old('username', auth()->user()->username) }}" name="username" class="form-control @error('username') is-invalid @enderror">
                                                 @error('username')
@@ -42,6 +51,24 @@
                                                 <label for="email">Email</label>
                                                 <input type="text" id="email" value="{{ old('email', auth()->user()->email) }}" name="email" class="form-control @error('email') is-invalid @enderror">
                                                 @error('email')
+                                                <div class="invalid-feedback">
+                                                    {{ $message }}
+                                                </div>
+                                                @enderror
+                                            </div>
+                                            <div class="form-group">
+                                                <label>No Telp</label>
+                                                <input type="text" class="form-control @error('phone') is-invalid @enderror" name="phone" value="{{ old('phone', auth()->user()->biodata->phone) }}">
+                                                @error('phone')
+                                                <div class="invalid-feedback">
+                                                    {{ $message }}
+                                                </div>
+                                                @enderror
+                                            </div>
+                                            <div class="form-group">
+                                                <label>Alamat</label>
+                                                <textarea name="address" id="" cols="30" rows="10" style="min-height: 200px; resize: none;" class="form-control @error('address') is-invalid @enderror">{{ old('address', auth()->user()->biodata->address) }}</textarea>
+                                                @error('address')
                                                 <div class="invalid-feedback">
                                                     {{ $message }}
                                                 </div>

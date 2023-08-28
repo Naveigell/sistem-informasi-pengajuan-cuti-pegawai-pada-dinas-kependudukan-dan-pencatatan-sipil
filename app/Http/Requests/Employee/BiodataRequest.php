@@ -18,12 +18,12 @@ class BiodataRequest extends FormRequest
         $employee = auth()->user()->load('biodata');
 
         $rules = [
-//            "name" => "required|string|max:50",
+            "name" => "required|string|max:50",
 //            "nip" => "required|unique:biodatas|string|max:60",
-//            "username" => "required|unique:users|string|max:60",
+            "username" => "required|unique:users|string|max:60",
             "email" => "required|unique:users|string|max:70",
             "phone" => "required|string|regex:/(08)[0-9]{5,17}/",
-//            "address" => "required|string|max:255",
+            "address" => "required|string|max:255",
         ];
 
         if ($this->isMethod('post')) {

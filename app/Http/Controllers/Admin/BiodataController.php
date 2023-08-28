@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\BiodataRequest;
 use App\Http\Requests\Admin\PasswordRequest;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class BiodataController extends Controller
 {
@@ -16,7 +17,10 @@ class BiodataController extends Controller
 
     public function store(BiodataRequest $request)
     {
-        auth()->user()->update($request->validated());
+        DB::transaction(function () use ($request) {
+            auth()->user()->update($request->validated());
+            auth()->user()->biodata->update($request->validated());
+        });
 
         return redirect(route('admin.biodatas.create'))->with('success', 'Biodata berhasil diubah');
     }

@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\LeaderRequest;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class LeaderController extends Controller
 {
@@ -39,9 +40,12 @@ class LeaderController extends Controller
      */
     public function store(LeaderRequest $request)
     {
-        User::create(array_merge($request->validated(), [
-            "password" => 123456,
-        ]));
+        DB::transaction(function () use ($request) {
+            $leader = User::create(array_merge($request->validated(), [
+                "password" => 123456,
+            ]));
+            $leader->biodata()->create($request->validated());
+        });
 
         return redirect(route('admin.leaders.index'))->with('success', 'Kepala berhasil di tambah');
     }
@@ -54,6 +58,8 @@ class LeaderController extends Controller
      */
     public function edit(User $leader)
     {
+        $leader->load('biodata');
+
         return view('admin.pages.leader.form', compact('leader'));
     }
 
@@ -66,7 +72,10 @@ class LeaderController extends Controller
      */
     public function update(LeaderRequest $request, User $leader)
     {
-        $leader->update($request->validated());
+        DB::transaction(function () use ($request, $leader) {
+            $leader->update($request->validated());
+            $leader->biodata->update($request->validated());
+        });
 
         return redirect(route('admin.leaders.index'))->with('success', 'Kepala berhasil di ubah');
     }

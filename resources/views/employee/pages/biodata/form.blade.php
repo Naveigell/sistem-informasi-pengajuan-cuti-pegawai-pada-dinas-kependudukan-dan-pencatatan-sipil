@@ -35,7 +35,7 @@
                         </div>
                         <div class="form-group">
                             <label>Nama</label>
-                            <input disabled type="text" class="form-control @error('name') is-invalid @enderror" name="name" value="{{ old('name', @$user ? $user->name : '') }}">
+                            <input type="text" class="form-control @error('name') is-invalid @enderror" name="name" value="{{ old('name', @$user ? $user->name : '') }}">
                             @error('name')
                             <div class="invalid-feedback">
                                 {{ $message }}
@@ -44,7 +44,7 @@
                         </div>
                         <div class="form-group">
                             <label>Username</label>
-                            <input disabled type="text" class="form-control @error('username') is-invalid @enderror" name="username" value="{{ old('username', @$user ? $user->username : '') }}">
+                            <input type="text" class="form-control @error('username') is-invalid @enderror" name="username" value="{{ old('username', @$user ? $user->username : '') }}">
                             @error('username')
                             <div class="invalid-feedback">
                                 {{ $message }}
@@ -71,7 +71,7 @@
                         </div>
                         <div class="form-group">
                             <label>Alamat</label>
-                            <textarea disabled name="address" id="" cols="30" rows="10" class="form-control @error('address') is-invalid @enderror" style="min-height: 250px; resize: none;">{{ old('address', @$user ? $user->biodata->address : '') }}</textarea>
+                            <textarea name="address" id="" cols="30" rows="10" class="form-control @error('address') is-invalid @enderror" style="min-height: 250px; resize: none;">{{ old('address', @$user ? $user->biodata->address : '') }}</textarea>
                             @error('address')
                             <div class="invalid-feedback">
                                 {{ $message }}
