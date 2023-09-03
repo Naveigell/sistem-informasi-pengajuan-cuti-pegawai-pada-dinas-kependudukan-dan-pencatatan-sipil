@@ -19,7 +19,7 @@ class LeaderRequest extends FormRequest
         $leader->load('biodata');
 
         $rules = [
-            "nip" => "required|unique:biodatas|string|max:50", // need advance validation, do it if you want
+            "nip" => "required|numeric|unique:biodatas|max_digits:30", // need advance validation, do it if you want
             "role" => "required|string|in:" . join(',', [User::ROLE_HEAD_OF_DEPARTMENT, User::ROLE_HEAD_OF_FIELD]),
             "name" => "required|string|max:50",
             "username" => "required|unique:users|string|max:60",

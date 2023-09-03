@@ -23,7 +23,7 @@ class EmployeeRequest extends FormRequest
         })->flatten();
 
         $rules = [
-            "nip" => "required|string|max:50", // need advance validation, do it if you want
+            "nip" => "required|numeric|max_digits:30", // need advance validation, do it if you want
             "group" => "required|string|in:" . $groups->join(','),
             "role" => "required|string|in:" . join(',', [User::ROLE_EMPLOYEE]),
             "name" => "required|string|max:50",
